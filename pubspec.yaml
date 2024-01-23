@@ -1,4 +1,4 @@
-name: flutter_application_1
+name: flutter_example
 description: "research project"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -41,6 +41,8 @@ dependencies:
   flutter_bloc: ^8.1.3
   equatable: ^2.0.5
   meta: ^1.10.0
+  http: ^1.2.0
+  json_annotation: ^4.8.1
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +54,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  json_serializable: ^6.7.1
+  build_runner: ^2.4.8
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

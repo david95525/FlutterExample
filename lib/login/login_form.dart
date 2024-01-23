@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'login_bloc.dart';
+import 'validators.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -13,10 +14,6 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   late LoginBloc _loginBloc;
-  bool get isPopulated =>
-      _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
-  bool isLoginButtonEnabled(LoginState state) =>
-      state.isFormValid && isPopulated;
 
   @override
   void initState() {
@@ -47,7 +44,7 @@ class _LoginFormState extends State<LoginForm> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[Text('Login success'), Icon(Icons.error)],
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.green,
           ));
         }
       },
@@ -70,7 +67,8 @@ class _LoginFormState extends State<LoginForm> {
                         icon: Icon(Icons.email), labelText: 'Email'),
                     autovalidateMode: AutovalidateMode.always,
                     autocorrect: false,
-                    validator: (_) {
+                    validator: (value) {
+                      if (value.toString().isEmpty) return null;
                       return !state.isEmailValid ? 'Invalid Email' : null;
                     },
                   ),
@@ -81,8 +79,11 @@ class _LoginFormState extends State<LoginForm> {
                     obscureText: true,
                     autovalidateMode: AutovalidateMode.always,
                     autocorrect: false,
-                    validator: (_) {
-                      return !state.isPasswordValid ? 'Invalid Password' : null;
+                    validator: (value) {
+                      if (value.toString().isEmpty) return null;
+                      return !Validators.isValidPassword(value.toString())
+                          ? 'Invalid Password'
+                          : null;
                     },
                   ),
                   Padding(
@@ -90,10 +91,16 @@ class _LoginFormState extends State<LoginForm> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        LoginButton(
-                            onPressed: isLoginButtonEnabled(state)
-                                ? _onFormSubmitted
-                                : () => {}),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (state.isFormValid &&
+                                _emailController.text.isNotEmpty &&
+                                _passwordController.text.isNotEmpty) {
+                              _onFormSubmitted();
+                            }
+                          },
+                          child: const Text('Login'),
+                        ),
                       ],
                     ),
                   )
@@ -122,17 +129,5 @@ class _LoginFormState extends State<LoginForm> {
   void _onFormSubmitted() {
     _loginBloc.add(LoginWithPassword(
         email: _emailController.text, password: _passwordController.text));
-  }
-}
-
-class LoginButton extends StatelessWidget {
-  const LoginButton({super.key, required this.onPressed});
-  final VoidCallback onPressed;
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: const Text('Login'),
-    );
   }
 }

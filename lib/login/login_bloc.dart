@@ -2,41 +2,55 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'validators.dart';
+import '../repository/user_repository.dart';
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginState.empty()) {
-    on<EmailChanged>((event, emit) => _mapEmailChangedToState(event.email));
-    on<PasswordChanged>(
-        (event, emit) => _mapPasswordChangedToState(event.password));
-    on<LoginWithPassword>((event, emit) => _mapLoginWithPasswordToState(
-        email: event.email, password: event.password));
+  LoginBloc({required UserRepository userRepository})
+      : _userRepository = userRepository,
+        super(LoginState.empty()) {
+    on<EmailChanged>(_mapEmailChangedToState);
+    on<PasswordChanged>(_mapPasswordChangedToState);
+    on<LoginWithPassword>(_mapLoginWithPasswordToState);
+  }
+  final UserRepository _userRepository;
+  Future<void> _mapEmailChangedToState(
+      EmailChanged event, Emitter<LoginState> emit) async {
+    emit(state.update(isEmailValid: Validators.isValidEmail(event.email)));
   }
 
-  Stream<LoginState> _mapEmailChangedToState(String email) async* {
-    debugPrint(email);
-    yield state.update(
-      isEmailValid: Validators.isValidEmail(email),
-    );
+  Future<void> _mapPasswordChangedToState(
+      PasswordChanged event, Emitter<LoginState> emit) async {
+    emit(state.update(
+        isPasswordValid: Validators.isValidPassword(event.password)));
   }
 
-  Stream<LoginState> _mapPasswordChangedToState(String password) async* {
-    yield state.update(
-      isPasswordValid: Validators.isValidPassword(password),
-    );
-  }
-
-  Stream<LoginState> _mapLoginWithPasswordToState({
-    String email = "",
-    String password = "",
-  }) async* {
+  Future<void> _mapLoginWithPasswordToState(
+      LoginWithPassword event, Emitter<LoginState> emit) async {
     try {
-      if (email == "test@example.com" && password == "1234") {
-        yield LoginState.success();
+      final user = await _tryGetUser();
+      if (user != null) {
+        if (event.email == user.email && event.password == user.password) {
+          emit(LoginState.success());
+          debugPrint(user.toString());
+        } else {
+          emit(LoginState.failure());
+        }
+      } else {
+        emit(LoginState.failure());
       }
+    } catch (err) {
+      emit(LoginState.failure());
+    }
+  }
+
+  Future<User?> _tryGetUser() async {
+    try {
+      final user = await _userRepository.getUser();
+      return user;
     } catch (_) {
-      yield LoginState.failure();
+      return null;
     }
   }
 }
