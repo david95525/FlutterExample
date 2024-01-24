@@ -13,7 +13,7 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return SplashScreen.navigate(
       name: 'assets/splash.flr', // flr動畫檔路徑
-      next: (_) => const App(),
+      next: (_) => const AppIndex(),
      // const HomePage(title: 'Flutter Home Page'), 
       until: () => Future.delayed(const Duration(seconds: 3)), //等待3秒
       startAnimation: 'rotate_scale_color', // 動畫名稱

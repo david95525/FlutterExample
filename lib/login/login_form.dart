@@ -1,5 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_example/models/login_model.dart';
+import 'package:flutter_example/models/response_model.dart';
+import 'package:flutter_example/my_router.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'login_bloc.dart';
 import 'validators.dart';
 
@@ -14,7 +21,7 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   late LoginBloc _loginBloc;
-
+  late ResponseModel apidata;
   @override
   void initState() {
     _loginBloc = BlocProvider.of<LoginBloc>(context);
@@ -32,20 +39,30 @@ class _LoginFormState extends State<LoginForm> {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[Text('Login Failure'), Icon(Icons.error)],
+              children: <Widget>[
+                Text('Login Failure'),
+                Icon(Icons.error),
+              ],
             ),
             backgroundColor: Colors.red,
           ));
         }
         if (state.isSuccess) {
+          String username = apidata.data.name ?? "";
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[Text('Login success'), Icon(Icons.error)],
+              children: <Widget>[
+                Text('Login success , Member $username'),
+                const Icon(Icons.error)
+              ],
             ),
             backgroundColor: Colors.green,
           ));
+          Timer(const Duration(seconds: 5), () {
+            Navigator.pushNamed(context, RouteName.member);
+          });
         }
       },
       builder: (BuildContext context, LoginState state) {
@@ -127,7 +144,29 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _onFormSubmitted() {
-    _loginBloc.add(LoginWithPassword(
-        email: _emailController.text, password: _passwordController.text));
+    _login(_emailController.text, _passwordController.text);
+  }
+
+  void _login(String email, String password) async {
+    var client = http.Client();
+    try {
+      final data = LoginModel(email: email, password: password);
+      var response = await client.post(Uri.https('', '/api/Account/Login'),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(data.toJson()));
+      if (response.statusCode == 200) {
+        setState(() {
+          apidata = ResponseModel.fromJson(jsonDecode(response.body));
+          debugPrint(apidata.toString());
+        });
+        if (apidata.code == 10000) {
+          _loginBloc.add(const LoginWithPassword(isSuceess: true));
+        } else {
+          _loginBloc.add(const LoginWithPassword(isSuceess: false));
+        }
+      }
+    } finally {
+      client.close();
+    }
   }
 }

@@ -32,16 +32,15 @@ class PasswordChanged extends LoginEvent {
 
 //使用信箱密碼登入
 class LoginWithPassword extends LoginEvent {
-  final String email;
-  final String password;
+  final bool isSuceess;
 
-  const LoginWithPassword({required this.email, required this.password});
+  const LoginWithPassword({required this.isSuceess});
 
   @override
   String toString() {
-    return 'Login { email: $email, password: $password }';
+    return 'Login { isSuceess: $isSuceess }';
   }
 
   @override
-  List<Object> get props => [email, password];
+  List<Object> get props => [isSuceess];
 }

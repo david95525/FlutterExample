@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example/models/weather_model.dart';
 import 'package:http/http.dart' as http;
-import './weather_model.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class _WeatherPageState extends State<WeatherPage> {
   }
 
   void fetchData() async {
-    String authorization = '';
+    String authorization = 'CWB-A00E9F9E-26D6-4005-B2F7-E8E7B6CEF5DA';
     const timeout = Duration(seconds: 10);
     var url =
         Uri.https('opendata.cwa.gov.tw', '/api/v1/rest/datastore/F-D0047-063', {

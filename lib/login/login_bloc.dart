@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_example/repository/user_repository.dart';
 import 'validators.dart';
-import '../repository/user_repository.dart';
+
 part 'login_event.dart';
 part 'login_state.dart';
 
@@ -31,9 +32,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       final user = await _tryGetUser();
       if (user != null) {
-        if (event.email == user.email && event.password == user.password) {
+        if (event.isSuceess) {
           emit(LoginState.success());
-          debugPrint(user.toString());
         } else {
           emit(LoginState.failure());
         }
