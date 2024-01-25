@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example/my_router.dart';
 import './login/login_page.dart';
 import './home/home_page.dart';
 
@@ -31,16 +32,18 @@ class _AppIndexState extends State<AppIndex> {
         child: Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
-                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                leading: IconButton(
-                    icon: const Icon(Icons.favorite, color: Colors.red),
-                    onPressed: () {
-                      if (scaffoldKey.currentState!.isDrawerOpen) {
-                        scaffoldKey.currentState!.closeDrawer();
-                      } else {
-                        scaffoldKey.currentState!.openDrawer();
-                      }
-                    })),
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              actions: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.login,
+                    color: Colors.white,
+                  ),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, RouteName.member),
+                )
+              ],
+            ),
             bottomNavigationBar: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
                 items: navigationitems,

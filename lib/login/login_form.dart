@@ -48,7 +48,7 @@ class _LoginFormState extends State<LoginForm> {
           ));
         }
         if (state.isSuccess) {
-          String username = apidata.data.name ?? "";
+          String username = apidata.data?.name ?? "";
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Row(
@@ -60,7 +60,8 @@ class _LoginFormState extends State<LoginForm> {
             ),
             backgroundColor: Colors.green,
           ));
-          Timer(const Duration(seconds: 5), () {
+          Timer(const Duration(seconds: 1), () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
             Navigator.pushNamed(context, RouteName.member);
           });
         }
@@ -151,13 +152,13 @@ class _LoginFormState extends State<LoginForm> {
     var client = http.Client();
     try {
       final data = LoginModel(email: email, password: password);
-      var response = await client.post(Uri.https('', '/api/Account/Login'),
+      var response = await client.post(
+          Uri.https('flutterexample.azurewebsites.net', '/api/Account/Login'),
           headers: {"Content-Type": "application/json"},
           body: jsonEncode(data.toJson()));
       if (response.statusCode == 200) {
         setState(() {
           apidata = ResponseModel.fromJson(jsonDecode(response.body));
-          debugPrint(apidata.toString());
         });
         if (apidata.code == 10000) {
           _loginBloc.add(const LoginWithPassword(isSuceess: true));

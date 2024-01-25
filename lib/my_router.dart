@@ -27,7 +27,7 @@ class NoAnimRouteBuilder extends PageRouteBuilder {
       : super(
             opaque: false,
             pageBuilder: (context, animation, secondaryAnimation) => page,
-            transitionDuration: const Duration(milliseconds: 0),
+            transitionDuration: const Duration(milliseconds: 1),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) => child);
 }

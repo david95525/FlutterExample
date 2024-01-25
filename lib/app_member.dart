@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example/my_router.dart';
 import './counter/counter_page.dart';
-import './weather/weather_page.dart';
+import 'bloodpressure/bloodpressure_page.dart';
 
 class AppMember extends StatefulWidget {
   const AppMember({super.key});
@@ -12,14 +13,14 @@ class _AppMemberState extends State<AppMember> {
 //bottomNavigationBar
   final navigationitems = const [
     BottomNavigationBarItem(icon: Icon(Icons.calculate), label: "Counter"),
-    BottomNavigationBarItem(icon: Icon(Icons.sunny), label: "Weather")
+    BottomNavigationBarItem(icon: Icon(Icons.bloodtype_sharp), label: "BloodPressure")
   ];
   int _selectedIndex = 0;
   void _onItemTap(int index) {
     setState(() => _selectedIndex = index);
   }
 
-  final _bodyList = [const CounterPage(), const WeatherPage()];
+  final _bodyList = [const CounterPage(), const BloodPressurePage()];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -38,6 +39,16 @@ class _AppMemberState extends State<AppMember> {
                       scaffoldKey.currentState!.openDrawer();
                     }
                   }),
+              actions: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                  ),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, RouteName.index),
+                )
+              ],
               bottom: TabBar(
                 tabs: tabList.map((choice) {
                   return Tab(
