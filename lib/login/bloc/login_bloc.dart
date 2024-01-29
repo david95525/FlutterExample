@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_example/repository/user_repository.dart';
 import 'validators.dart';
 
@@ -11,23 +10,23 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({required UserRepository userRepository})
       : _userRepository = userRepository,
         super(LoginState.empty()) {
-    on<EmailChanged>(_mapEmailChangedToState);
-    on<PasswordChanged>(_mapPasswordChangedToState);
-    on<LoginWithPassword>(_mapLoginWithPasswordToState);
+    on<EmailChanged>(_onEmailChanged);
+    on<PasswordChanged>(_onPasswordChanged);
+    on<LoginWithPassword>(_onLoginWithPassword);
   }
   final UserRepository _userRepository;
-  Future<void> _mapEmailChangedToState(
+  Future<void> _onEmailChanged(
       EmailChanged event, Emitter<LoginState> emit) async {
     emit(state.update(isEmailValid: Validators.isValidEmail(event.email)));
   }
 
-  Future<void> _mapPasswordChangedToState(
+  Future<void> _onPasswordChanged(
       PasswordChanged event, Emitter<LoginState> emit) async {
     emit(state.update(
         isPasswordValid: Validators.isValidPassword(event.password)));
   }
 
-  Future<void> _mapLoginWithPasswordToState(
+  Future<void> _onLoginWithPassword(
       LoginWithPassword event, Emitter<LoginState> emit) async {
     try {
       final user = await _tryGetUser();

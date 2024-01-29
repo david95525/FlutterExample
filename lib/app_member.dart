@@ -3,13 +3,13 @@ import 'package:flutter_example/my_router.dart';
 import './counter/counter_page.dart';
 import 'bloodpressure/bloodpressure_page.dart';
 
-class AppMember extends StatefulWidget {
-  const AppMember({super.key});
+class MemberApp extends StatefulWidget {
+  const MemberApp({super.key});
   @override
-  State<AppMember> createState() => _AppMemberState();
+  State<MemberApp> createState() => _MemberAppState();
 }
 
-class _AppMemberState extends State<AppMember> {
+class _MemberAppState extends State<MemberApp> {
 //bottomNavigationBar
   final navigationitems = const [
     BottomNavigationBarItem(icon: Icon(Icons.calculate), label: "Counter"),

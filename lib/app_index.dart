@@ -3,13 +3,13 @@ import 'package:flutter_example/my_router.dart';
 import './login/login_page.dart';
 import './home/home_page.dart';
 
-class AppIndex extends StatefulWidget {
-  const AppIndex({super.key});
+class IndexApp extends StatefulWidget {
+  const IndexApp({super.key});
   @override
-  State<AppIndex> createState() => _AppIndexState();
+  State<IndexApp> createState() => _IndexAppState();
 }
 
-class _AppIndexState extends State<AppIndex> {
+class _IndexAppState extends State<IndexApp> {
 //bottomNavigationBar
   final navigationitems = const [
     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
@@ -41,7 +41,11 @@ class _AppIndexState extends State<AppIndex> {
                   ),
                   onPressed: () =>
                       Navigator.pushNamed(context, RouteName.member),
-                )
+                ),
+                TextButton(
+                    onPressed: () =>
+                        Navigator.pushNamed(context, RouteName.firebase),
+                    child: const Text('Firebase'))
               ],
             ),
             bottomNavigationBar: BottomNavigationBar(

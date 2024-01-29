@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_example/login/bloc/login_bloc.dart';
 import 'package:flutter_example/models/login_model.dart';
 import 'package:flutter_example/models/response_model.dart';
 import 'package:flutter_example/my_router.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'login_bloc.dart';
-import 'validators.dart';
+import 'bloc/validators.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
