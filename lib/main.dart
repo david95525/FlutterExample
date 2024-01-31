@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_example/firebase/bloc/app_bloc.dart';
 import 'package:flutter_example/firebase/bloc/bloc_observer.dart';
-import 'package:flutter_example/firebase/firebase_login/firebase_login_page.dart';
 import 'package:flutter_example/firebase_options.dart';
 import 'package:flutter_example/my_router.dart';
 
@@ -28,21 +27,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'flutter_example',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: BlocProvider(
-        create: (_) => AppBloc(
-          authenticationRepository: _firebaseAuthenticationRepository,
-        ),
-        child: const FirebaseLoginPage(),
-      ),
-      onGenerateRoute: MyRouter.generateRoute,
-      initialRoute: RouteName.index,
-    );
+    return RepositoryProvider.value(
+        value: _firebaseAuthenticationRepository,
+        child: BlocProvider(
+            create: (_) => AppBloc(
+                  authenticationRepository: _firebaseAuthenticationRepository,
+                ),
+            child: MaterialApp(              
+              title: 'flutter_example',
+              debugShowCheckedModeBanner: false,
+              onGenerateRoute: MyRouter.generateRoute,
+              initialRoute: RouteName.index,
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+                useMaterial3: true,
+              ),
+            )));
   }
 }

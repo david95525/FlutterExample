@@ -1,35 +1,49 @@
+import 'dart:async';
+
+import 'package:firebase_authentication_repository/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_example/firebase/bloc/app_bloc.dart';
 import 'package:flutter_example/firebase/firebase_login/cubit/login_cubit.dart';
 import 'package:flutter_example/firebase/firebase_signup/sign_up_page.dart';
+import 'package:flutter_example/my_router.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
 
 class FirebaseLoginForm extends StatelessWidget {
   const FirebaseLoginForm({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
-      listener: (context, state) {
-        if (state.status.isFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage ?? 'Authentication Failure'),
-              ),
-            );
-        }
-      },
-      child: Align(
+    String? userEmail = context.select((AppBloc bloc) => bloc.state.user.email);
+    return BlocConsumer<LoginCubit, LoginState>(listener: (context, state) {
+      if (state.status.isFailure) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage ?? 'Authentication Failure'),
+            ),
+          );
+      }
+      if (state.status.isSuccess) {
+        String email = userEmail ?? "";
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(
+            content: Text('$email login success'),
+            backgroundColor: Colors.green,
+          ));
+          Navigator.pushNamed(context, RouteName.member);
+      }
+    }, builder: (context, state) {
+      return Align(
         alignment: const Alignment(0, -1 / 3),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/bloc_logo_small.png',
+                'assets/back.jpg',
                 height: 120,
               ),
               const SizedBox(height: 16),
@@ -45,8 +59,8 @@ class FirebaseLoginForm extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 

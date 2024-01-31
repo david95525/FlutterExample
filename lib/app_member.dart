@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_example/firebase/bloc/app_bloc.dart';
 import 'package:flutter_example/my_router.dart';
-import './counter/counter_page.dart';
+import 'member/member_page.dart';
 import 'bloodpressure/bloodpressure_page.dart';
 
 class MemberApp extends StatefulWidget {
@@ -12,7 +14,7 @@ class MemberApp extends StatefulWidget {
 class _MemberAppState extends State<MemberApp> {
 //bottomNavigationBar
   final navigationitems = const [
-    BottomNavigationBarItem(icon: Icon(Icons.calculate), label: "Counter"),
+    BottomNavigationBarItem(icon: Icon(Icons.calculate), label: "Member"),
     BottomNavigationBarItem(icon: Icon(Icons.bloodtype_sharp), label: "BloodPressure")
   ];
   int _selectedIndex = 0;
@@ -20,7 +22,7 @@ class _MemberAppState extends State<MemberApp> {
     setState(() => _selectedIndex = index);
   }
 
-  final _bodyList = [const CounterPage(), const BloodPressurePage()];
+  final _bodyList = [const MemberPage() ,const BloodPressurePage()];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {

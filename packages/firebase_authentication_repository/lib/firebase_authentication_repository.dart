@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
 
-
 /// {@template sign_up_with_email_and_password_failure}
 /// Thrown during the sign up process if a failure occurs.
 /// {@endtemplate}
@@ -149,7 +148,7 @@ class LogOutFailure implements Exception {}
 /// {@endtemplate}
 class FirebaseAuthenticationRepository {
   /// {@macro authentication_repository}
- FirebaseAuthenticationRepository({
+  FirebaseAuthenticationRepository({
     CacheClient? cache,
     firebase_auth.FirebaseAuth? firebaseAuth,
     GoogleSignIn? googleSignIn,
@@ -178,7 +177,8 @@ class FirebaseAuthenticationRepository {
   /// Emits [User.empty] if the user is not authenticated.
   Stream<FirebaseUser> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      final user = firebaseUser == null ? FirebaseUser.empty : firebaseUser.toUser;
+      var user =
+          firebaseUser == null ? FirebaseUser.empty : firebaseUser.toUser;
       _cache.write(key: userCacheKey, value: user);
       return user;
     });
@@ -199,6 +199,10 @@ class FirebaseAuthenticationRepository {
         email: email,
         password: password,
       );
+      var user = _firebaseAuth.currentUser;
+      if (user != null) {
+        await user.sendEmailVerification();
+      }
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
@@ -211,7 +215,8 @@ class FirebaseAuthenticationRepository {
     try {
       late final firebase_auth.AuthCredential credential;
       if (isWeb) {
-        final googleProvider = firebase_auth.GoogleAuthProvider();
+        final googleProvider =
+            firebase_auth.GoogleAuthProvider().addScope("email");
         final userCredential = await _firebaseAuth.signInWithPopup(
           googleProvider,
         );
@@ -241,9 +246,7 @@ class FirebaseAuthenticationRepository {
   }) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+          email: email, password: password);
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
@@ -270,7 +273,10 @@ class FirebaseAuthenticationRepository {
 extension on firebase_auth.User {
   /// Maps a [firebase_auth.User] into a [User].
   FirebaseUser get toUser {
-    return FirebaseUser(id: uid, email: email, name: displayName, photo: photoURL);
+    return FirebaseUser(
+        id: uid,
+        email: providerData[0].email,
+        name: displayName,
+        photo: photoURL);
   }
 }
-
