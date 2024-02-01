@@ -11,12 +11,11 @@ class MemberPage extends StatefulWidget {
 
 class _MemberPageState extends State<MemberPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.user);
-    debugPrint(user.toString());
     String? email = user.email ?? "";
+    String? username = user.name ?? "";
     return Scaffold(
         key: scaffoldKey,
         body: Center(
@@ -25,6 +24,10 @@ class _MemberPageState extends State<MemberPage> {
             children: <Widget>[
               Text(
                 "email: $email ",
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              Text(
+                "name: $username ",
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ],

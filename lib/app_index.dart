@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example/bluetooth/bluetooth_page.dart';
 import 'package:flutter_example/my_router.dart';
 import './login/login_page.dart';
 import './home/home_page.dart';
@@ -14,15 +15,22 @@ class _IndexAppState extends State<IndexApp> {
   final navigationitems = const [
     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
     BottomNavigationBarItem(icon: Icon(Icons.login), label: "Login"),
+    BottomNavigationBarItem(icon: Icon(Icons.bluetooth), label: "Bluetooth"),
+    BottomNavigationBarItem(icon: Icon(Icons.storage), label: "Localstorage"),
   ];
   int _selectedIndex = 0;
   void _onItemTap(int index) {
-    setState(() => _selectedIndex = index);
+    if (index == 3) {
+      Navigator.pushNamed(context, RouteName.localstorage);
+    } else {
+      setState(() => _selectedIndex = index);
+    }
   }
 
   final _bodyList = [
     const HomePage(title: "home"),
     const LoginPage(),
+    const BluetoothPage()
   ];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
