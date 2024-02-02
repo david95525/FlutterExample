@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_example/models/response_model.dart';
 import 'package:http/http.dart' as http;
@@ -107,7 +107,17 @@ class _BloodPressurePageState extends State<BloodPressurePage> {
       setState(() {
         responsedata = ResponseModel.fromJson(jsonDecode(response.body));
         bpmdata = responsedata?.bpmData ?? [];
+        _save(bpmdata);
       });
     }
+  }
+
+  void _save(List<BloodPressureModel> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> jsonlist = [];
+    for (BloodPressureModel item in data) {
+      jsonlist.add((jsonEncode(item)));
+    }
+    prefs.setStringList('bloodpressure', jsonlist);
   }
 }
