@@ -1,8 +1,8 @@
 import 'package:firebase_authentication_repository/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_example/firebase/firebase_login/cubit/login_cubit.dart';
-import 'package:flutter_example/firebase/firebase_login/firebase_login_form.dart';
+import 'package:flutter_example/pages/firebase/firebase_login/cubit/login_cubit.dart';
+import 'package:flutter_example/pages/firebase/firebase_login/firebase_login_form.dart';
 
 class FirebaseLoginPage extends StatelessWidget {
   const FirebaseLoginPage({super.key});

@@ -78,6 +78,16 @@ class _SharedPreferencesPageState extends State<SharedPreferencesPage> {
                 ),
                 onPressed: () => _loadsharedPreference(),
                 child: const Text('load'),
+              ),
+                  ElevatedButton(
+                key: const Key('clearButton'),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                onPressed: () => _clean(),
+                child: const Text('clear'),
               )
             ],
           ),

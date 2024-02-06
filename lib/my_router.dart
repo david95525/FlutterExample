@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example/app_index.dart';
 import 'package:flutter_example/app_member.dart';
-import 'package:flutter_example/firebase/firebase_login/firebase_login_page.dart';
-import 'package:flutter_example/local_storage/local_storage.dart';
+import 'package:flutter_example/pages/firebase/firebase_login/firebase_login_page.dart';
+import 'package:flutter_example/pages/local_storage/local_storage.dart';
 
 class RouteName {
   static const String index = 'index';

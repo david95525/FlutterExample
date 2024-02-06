@@ -8,7 +8,8 @@ part of 'bloodpressure_model.dart';
 
 BloodPressureModel _$BloodPressureModelFromJson(Map<String, dynamic> json) =>
     BloodPressureModel(
-      bpmId: json['bpm_id'] as int,
+      bpmid: json['bpmid'] as int,
+      updatedate: json['updatedate'] as String?,
       source: json['source'] as int?,
       sys: json['sys'] as int?,
       dia: json['dia'] as int?,
@@ -16,13 +17,13 @@ BloodPressureModel _$BloodPressureModelFromJson(Map<String, dynamic> json) =>
       afib: json['afib'] as int?,
       pad: json['pad'] as int?,
       mode: json['mode'] as int?,
-      updateDate: json['update_date'] as String?,
       note: json['note'] as String?,
     );
 
 Map<String, dynamic> _$BloodPressureModelToJson(BloodPressureModel instance) =>
     <String, dynamic>{
-      'bpm_id': instance.bpmId,
+      'bpmid': instance.bpmid,
+      'updatedate': instance.updatedate,
       'source': instance.source,
       'sys': instance.sys,
       'dia': instance.dia,
@@ -30,6 +31,5 @@ Map<String, dynamic> _$BloodPressureModelToJson(BloodPressureModel instance) =>
       'afib': instance.afib,
       'pad': instance.pad,
       'mode': instance.mode,
-      'updat_date': instance.updateDate,
       'note': instance.note,
     };

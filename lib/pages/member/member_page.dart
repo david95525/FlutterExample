@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_example/firebase/bloc/app_bloc.dart';
+import 'package:flutter_example/pages/firebase/bloc/app_bloc.dart';
 
 class MemberPage extends StatefulWidget {
   const MemberPage({super.key});

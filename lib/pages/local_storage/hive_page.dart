@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_example/local_storage/hiveuser_model.dart';
+import 'package:flutter_example/pages/local_storage/hiveuser_model.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class HivePage extends StatefulWidget {

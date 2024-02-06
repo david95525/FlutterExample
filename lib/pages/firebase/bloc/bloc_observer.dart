@@ -10,7 +10,6 @@ class AppBlocObserver extends BlocObserver {
 
   @override
   void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
-    print(error);
     super.onError(bloc, error, stackTrace);
   }
 

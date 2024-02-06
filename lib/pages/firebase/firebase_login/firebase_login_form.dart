@@ -1,11 +1,9 @@
-import 'dart:async';
 
-import 'package:firebase_authentication_repository/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_example/firebase/bloc/app_bloc.dart';
-import 'package:flutter_example/firebase/firebase_login/cubit/login_cubit.dart';
-import 'package:flutter_example/firebase/firebase_signup/sign_up_page.dart';
+import 'package:flutter_example/pages/firebase/bloc/app_bloc.dart';
+import 'package:flutter_example/pages/firebase/firebase_login/cubit/login_cubit.dart';
+import 'package:flutter_example/pages/firebase/firebase_signup/sign_up_page.dart';
 import 'package:flutter_example/my_router.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';

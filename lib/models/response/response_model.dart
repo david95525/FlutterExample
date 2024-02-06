@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_example/models/bloodpressure_model.dart';
-import 'package:flutter_example/models/user_model.dart';
+import 'package:flutter_example/models/bloodpressure/bloodpressure_model.dart';
+import 'package:flutter_example/models/user/user_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'response_model.g.dart';

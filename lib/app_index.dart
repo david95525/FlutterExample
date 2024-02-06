@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_example/bluetooth/bluetooth_page.dart';
+import 'package:flutter_example/pages/bluetooth/bluetooth_page.dart';
 import 'package:flutter_example/my_router.dart';
-import './login/login_page.dart';
-import './home/home_page.dart';
+import 'package:flutter_example/pages/login/login_page.dart';
+import 'pages/home/home_page.dart';
 
 class IndexApp extends StatefulWidget {
   const IndexApp({super.key});

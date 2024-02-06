@@ -5,8 +5,8 @@ part 'bloodpressure_model.g.dart';
 
 @JsonSerializable()
 class BloodPressureModel extends Equatable {
-  final int bpmId;
-  final String? updateDate;
+  final int bpmid;
+  final String? updatedate;
   final int? source;
   final int? sys;
   final int? dia;
@@ -16,8 +16,8 @@ class BloodPressureModel extends Equatable {
   final int? mode;
   final String? note;
   const BloodPressureModel(
-      {required this.bpmId,
-      this.updateDate,
+      {required this.bpmid,
+      this.updatedate,
       this.source,
       this.sys,
       this.dia,
@@ -31,9 +31,9 @@ class BloodPressureModel extends Equatable {
   Map<String, dynamic> toJson() => _$BloodPressureModelToJson(this);
   @override
   String toString() =>
-      "bpmId:$bpmId source:$source sys:$sys dia:$dia pul:$pul afib:$afib pad:$pad mode:$mode updateDate:$updateDate note:$note";
+      "bpmId:$bpmid source:$source sys:$sys dia:$dia pul:$pul afib:$afib pad:$pad mode:$mode updateDate:$updatedate note:$note";
 
   @override
   List<Object?> get props =>
-      [bpmId, source, sys, dia, pul, afib, pad, mode, updateDate, note];
+      [bpmid, source, sys, dia, pul, afib, pad, mode, updatedate, note];
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_example/firebase/bloc/app_bloc.dart';
 import 'package:flutter_example/my_router.dart';
-import 'member/member_page.dart';
-import 'bloodpressure/bloodpressure_page.dart';
+import 'package:flutter_example/pages/bodytemperature/bodytemperature_page.dart';
+import 'pages/member/member_page.dart';
+import 'pages/bloodpressure/bloodpressure_page.dart';
 
 class MemberApp extends StatefulWidget {
   const MemberApp({super.key});
@@ -12,18 +11,30 @@ class MemberApp extends StatefulWidget {
 }
 
 class _MemberAppState extends State<MemberApp> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 //bottomNavigationBar
+  int _bottomselectedIndex = 0;
+  final _bodyList = [
+    const MemberPage(),
+    const BloodPressurePage(),
+    const BodyTemperaturePage()
+  ];
   final navigationitems = const [
     BottomNavigationBarItem(icon: Icon(Icons.calculate), label: "Member"),
-    BottomNavigationBarItem(icon: Icon(Icons.bloodtype_sharp), label: "BloodPressure")
+    BottomNavigationBarItem(
+        icon: Icon(Icons.bloodtype_sharp), label: "BloodPressure"),
+    BottomNavigationBarItem(
+        icon: Icon(Icons.thermostat), label: "BodyTemperature")
   ];
-  int _selectedIndex = 0;
   void _onItemTap(int index) {
-    setState(() => _selectedIndex = index);
+    setState(() => _bottomselectedIndex = index);
   }
 
-  final _bodyList = [const MemberPage() ,const BloodPressurePage()];
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+//railNavigationBar
+  NavigationRailLabelType labelType = NavigationRailLabelType.all;
+  bool showLeading = false;
+  bool showTrailing = false;
+  double groupAlignment = -1.0;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -97,8 +108,56 @@ class _MemberAppState extends State<MemberApp> {
                 type: BottomNavigationBarType.fixed,
                 items: navigationitems,
                 onTap: _onItemTap,
-                currentIndex: _selectedIndex),
-            body: _bodyList[_selectedIndex]));
+                currentIndex: _bottomselectedIndex),
+            body: Row(children: <Widget>[
+              NavigationRail(
+                selectedIndex: _bottomselectedIndex,
+                groupAlignment: groupAlignment,
+                onDestinationSelected: (int index) {
+                  setState(() {
+                    _bottomselectedIndex = index;
+                  });
+                },
+                labelType: labelType,
+                leading: showLeading
+                    ? FloatingActionButton(
+                        elevation: 0,
+                        onPressed: () {
+                          // Add your onPressed code here!
+                        },
+                        child: const Icon(Icons.add),
+                      )
+                    : const SizedBox(),
+                trailing: showTrailing
+                    ? IconButton(
+                        onPressed: () {
+                          // Add your onPressed code here!
+                        },
+                        icon: const Icon(Icons.more_horiz_rounded),
+                      )
+                    : const SizedBox(),
+                destinations: const <NavigationRailDestination>[
+                  NavigationRailDestination(
+                    icon: Icon(Icons.calculate),
+                    selectedIcon: Icon(Icons.calculate),
+                    label: Text('Member'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.bloodtype_sharp),
+                    selectedIcon: Icon(Icons.bloodtype_sharp),
+                    label: Text('BloodPressure'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.thermostat),
+                    selectedIcon: Icon(Icons.thermostat),
+                    label: Text('BodyTemperature'),
+                  )
+                ],
+              ),
+              const VerticalDivider(thickness: 1, width: 1),
+              // This is the main content.
+              Expanded(child: _bodyList[_bottomselectedIndex]),
+            ])));
   }
 }
 

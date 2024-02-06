@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_example/local_storage/hive_page.dart';
-import 'package:flutter_example/local_storage/shared_preferences_page.dart';
+import 'package:flutter_example/pages/local_storage/hive_page.dart';
+import 'package:flutter_example/pages/local_storage/shared_preferences_page.dart';
 
 class LocalStorageApp extends StatefulWidget {
   const LocalStorageApp({super.key});

@@ -8,7 +8,7 @@ import 'package:firebase_authentication_repository/index.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_example/firebase/bloc/bloc_observer.dart';
+import 'package:flutter_example/pages/firebase/bloc/bloc_observer.dart';
 import 'package:flutter_example/firebase_options.dart';
 
 import 'package:flutter_test/flutter_test.dart';
