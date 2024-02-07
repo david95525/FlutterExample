@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_example/pages/bluetooth/bluetooth_page.dart';
 import 'package:flutter_example/my_router.dart';
 import 'package:flutter_example/pages/login/login_page.dart';
+import 'package:flutter_example/pages/weather/weather_page.dart';
 import 'pages/home/home_page.dart';
 
 class IndexApp extends StatefulWidget {
@@ -15,7 +15,7 @@ class _IndexAppState extends State<IndexApp> {
   final navigationitems = const [
     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
     BottomNavigationBarItem(icon: Icon(Icons.login), label: "Login"),
-    BottomNavigationBarItem(icon: Icon(Icons.bluetooth), label: "Bluetooth"),
+    BottomNavigationBarItem(icon: Icon(Icons.sunny), label: "Weather"),
     BottomNavigationBarItem(icon: Icon(Icons.storage), label: "Localstorage"),
   ];
   int _selectedIndex = 0;
@@ -30,7 +30,7 @@ class _IndexAppState extends State<IndexApp> {
   final _bodyList = [
     const HomePage(title: "home"),
     const LoginPage(),
-    const BluetoothPage()
+    const WeatherPage()
   ];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override

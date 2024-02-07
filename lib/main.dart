@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
             create: (_) => AppBloc(
                   authenticationRepository: _firebaseAuthenticationRepository,
                 ),
-            child: MaterialApp(              
+            child: MaterialApp(
               title: 'flutter_example',
               debugShowCheckedModeBanner: false,
               onGenerateRoute: MyRouter.generateRoute,

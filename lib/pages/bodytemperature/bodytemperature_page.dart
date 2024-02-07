@@ -86,11 +86,11 @@ class _BodyTemperaturePageState extends State<BodyTemperaturePage> {
   void _initDataSave() async {
     List<BodyTemperatureModel> savedata = [
       const BodyTemperatureModel(
-          btId: 1, updateDate: "2024-02-04 14:00",bodytemp: 37.2, note: ""),
+          btId: 1, updateDate: "2024-02-04 14:00", bodytemp: 37.2, note: ""),
       const BodyTemperatureModel(
-          btId: 2, updateDate: "2024-02-05 14:00",bodytemp: 36.2, note: ""),
-          const BodyTemperatureModel(
-          btId: 2, updateDate: "2024-02-06 15:00",bodytemp: 36.7, note: "")
+          btId: 2, updateDate: "2024-02-05 14:00", bodytemp: 36.2, note: ""),
+      const BodyTemperatureModel(
+          btId: 2, updateDate: "2024-02-06 15:00", bodytemp: 36.7, note: "")
     ];
     final prefs = await SharedPreferences.getInstance();
     List<String> jsonlist = [];
@@ -102,7 +102,7 @@ class _BodyTemperaturePageState extends State<BodyTemperaturePage> {
 
   void _load() async {
     final prefs = await SharedPreferences.getInstance();
-    var jsonlist = prefs.getStringList('bodytemperature') ?? [];
+    List<String> jsonlist = prefs.getStringList('bodytemperature') ?? [];
     if (jsonlist.isNotEmpty) btdata.clear();
     List<BodyTemperatureModel> temp = [];
     for (String item in jsonlist) {

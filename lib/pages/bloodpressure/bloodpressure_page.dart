@@ -13,7 +13,6 @@ class BloodPressurePage extends StatefulWidget {
 }
 
 class _BloodPressurePageState extends State<BloodPressurePage> {
-  ResponseModel? responsedata;
   late List<BloodPressureModel> bpmdata;
 
   @override
@@ -141,9 +140,10 @@ class _BloodPressurePageState extends State<BloodPressurePage> {
     var response = await http.get(Uri.https(
         'flutterexample.azurewebsites.net', '/api/BloodPressure/Get'));
     if (response.statusCode == 200) {
+      ResponseModel responsedata =
+          ResponseModel.fromJson(jsonDecode(response.body));
       setState(() {
-        responsedata = ResponseModel.fromJson(jsonDecode(response.body));
-        List<BloodPressureModel> savedata = responsedata?.bpmData ?? [];
+        List<BloodPressureModel> savedata = responsedata.bpmData ?? [];
         _save(savedata);
       });
     }
@@ -160,7 +160,7 @@ class _BloodPressurePageState extends State<BloodPressurePage> {
 
   void _load() async {
     final prefs = await SharedPreferences.getInstance();
-    var jsonlist = prefs.getStringList('bloodpressure') ?? [];
+    List<String> jsonlist = prefs.getStringList('bloodpressure') ?? [];
     if (jsonlist.isNotEmpty) bpmdata.clear();
     List<BloodPressureModel> temp = [];
     for (String item in jsonlist) {

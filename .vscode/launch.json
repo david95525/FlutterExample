@@ -4,7 +4,11 @@
         {
             "name": "FlutterExample",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--dart-define-from-file",
+                "api-keys.json"
+            ]
         },
         {
             "name": "FlutterExample (profile mode)",
