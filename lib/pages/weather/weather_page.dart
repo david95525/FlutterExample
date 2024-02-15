@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_example/models/weather/weather_model.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +11,7 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
+  WeatherModel? weather;
   static const String authorizationkey =
       String.fromEnvironment('authorization_key');
 
@@ -28,12 +27,26 @@ class _WeatherPageState extends State<WeatherPage> {
       appBar: AppBar(
         title: const Text('Weather API Sample'),
       ),
-      body: const Center(
-        child: Text(
-          "",
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 20),
-        ),
+      body: Center(
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                weather != null ? "時間: ${weather?.datetime}" : "",
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 15),
+              ),
+              Text(
+                weather != null ? "${weather?.weatherDescription}" : "",
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 15),
+              ),
+              Text(
+                weather != null ? "平均氣溫:${weather?.temperature}" : "平均氣溫:",
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 15),
+              )
+            ]),
       ),
     );
   }
@@ -50,16 +63,26 @@ class _WeatherPageState extends State<WeatherPage> {
       'locationName': '南港區',
       'elementName': 'MinT,MaxT,PoP12h,T,Wx,WeatherDescription',
       'sort': 'time',
-      'timeFrom': '2024-02-08T00:00:00',
-      'timeTo': '2024-02-09T00:00:00'
+      'timeFrom': '2024-02-18T00:00:00',
+      'timeTo': '2024-02-19T00:00:00'
     });
     var response = await http.get(url).timeout(timeout);
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonmap = jsonDecode(response.body);
-
-      int temp = jsonmap['records']['locations'][0]['location'][0]
-          ['weatherElement'][1]['time'][0]['elementValue'][0]['value'] as int;
-      debugPrint(temp.toString());
+      setState(() {
+        weather = WeatherModel(
+            id: "01",
+            temperature: int.parse(jsonmap['records']['locations'][0]
+                    ['location'][0]['weatherElement'][1]['time'][0]
+                ['elementValue'][0]['value'] as String),
+            minTemperature: 0,
+            maxTemperature: 0,
+            weatherTypes: 0,
+            weatherDescription: jsonmap['records']['locations'][0]['location'][0]['weatherElement']
+                [4]['time'][0]['elementValue'][0]['value'] as String,
+            datetime: jsonmap['records']['locations'][0]['location'][0]
+                ['weatherElement'][4]['time'][0]['startTime'] as String);
+      });
     } else {
       throw Exception();
     }

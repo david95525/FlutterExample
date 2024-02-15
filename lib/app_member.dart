@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example/my_router.dart';
 import 'package:flutter_example/pages/bodytemperature/bodytemperature_page.dart';
+import 'package:flutter_example/pages/widget_example/progressIndicator_page.dart';
+import 'package:flutter_example/pages/widget_example/switch_checkbox_page.dart';
 import 'pages/member/member_page.dart';
 import 'pages/bloodpressure/bloodpressure_page.dart';
 
@@ -12,24 +14,30 @@ class MemberApp extends StatefulWidget {
 
 class _MemberAppState extends State<MemberApp> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-//bottomNavigationBar
-  int _bottomselectedIndex = 0;
+  int _selectedIndex = 0;
+  void _onItemTap(int index) {
+    setState(() => _selectedIndex = index);
+  }
+
   final _bodyList = [
     const MemberPage(),
     const BloodPressurePage(),
-    const BodyTemperaturePage()
+    const BodyTemperaturePage(),
+    const ProgressPage(),
+    const SwitchCheckboxPage()
   ];
+//bottomNavigationBar
   final navigationitems = const [
     BottomNavigationBarItem(icon: Icon(Icons.calculate), label: "Member"),
     BottomNavigationBarItem(
         icon: Icon(Icons.bloodtype_sharp), label: "BloodPressure"),
     BottomNavigationBarItem(
-        icon: Icon(Icons.thermostat), label: "BodyTemperature")
+        icon: Icon(Icons.thermostat), label: "BodyTemperature"),
+    BottomNavigationBarItem(
+        icon: Icon(Icons.now_widgets), label: "ProgressIndicator"),
+    BottomNavigationBarItem(
+        icon: Icon(Icons.now_widgets), label: "Switch Checkbox")
   ];
-  void _onItemTap(int index) {
-    setState(() => _bottomselectedIndex = index);
-  }
-
 //railNavigationBar
   NavigationRailLabelType labelType = NavigationRailLabelType.all;
   bool showLeading = false;
@@ -38,7 +46,7 @@ class _MemberAppState extends State<MemberApp> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: tabList.length,
+        length: 2,
         child: Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
@@ -62,14 +70,6 @@ class _MemberAppState extends State<MemberApp> {
                       Navigator.pushNamed(context, RouteName.index),
                 )
               ],
-              bottom: TabBar(
-                tabs: tabList.map((choice) {
-                  return Tab(
-                    text: choice.title,
-                    icon: Icon(choice.icon),
-                  );
-                }).toList(),
-              ),
             ),
             drawer: Drawer(
               child: ListView(
@@ -108,16 +108,12 @@ class _MemberAppState extends State<MemberApp> {
                 type: BottomNavigationBarType.fixed,
                 items: navigationitems,
                 onTap: _onItemTap,
-                currentIndex: _bottomselectedIndex),
+                currentIndex: _selectedIndex),
             body: Row(children: <Widget>[
               NavigationRail(
-                selectedIndex: _bottomselectedIndex,
+                selectedIndex: _selectedIndex,
                 groupAlignment: groupAlignment,
-                onDestinationSelected: (int index) {
-                  setState(() {
-                    _bottomselectedIndex = index;
-                  });
-                },
+                onDestinationSelected: _onItemTap,
                 labelType: labelType,
                 leading: showLeading
                     ? FloatingActionButton(
@@ -151,23 +147,22 @@ class _MemberAppState extends State<MemberApp> {
                     icon: Icon(Icons.thermostat),
                     selectedIcon: Icon(Icons.thermostat),
                     label: Text('BodyTemperature'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.now_widgets_outlined),
+                    selectedIcon: Icon(Icons.now_widgets),
+                    label: Text('ProgressIndicator'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.now_widgets_outlined),
+                    selectedIcon: Icon(Icons.now_widgets),
+                    label: Text('Switch Checkbox'),
                   )
                 ],
               ),
               const VerticalDivider(thickness: 1, width: 1),
               // This is the main content.
-              Expanded(child: _bodyList[_bottomselectedIndex]),
+              Expanded(child: _bodyList[_selectedIndex]),
             ])));
   }
 }
-
-class TabChoice {
-  final String title;
-  final IconData icon;
-  const TabChoice(this.title, this.icon);
-}
-
-const List<TabChoice> tabList = <TabChoice>[
-  TabChoice('Happy', Icons.mood),
-  TabChoice('Sad', Icons.mood_bad),
-];
