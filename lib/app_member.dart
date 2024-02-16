@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example/my_router.dart';
 import 'package:flutter_example/pages/bodytemperature/bodytemperature_page.dart';
+import 'package:flutter_example/pages/widget_example/layout_page.dart';
 import 'package:flutter_example/pages/widget_example/progressIndicator_page.dart';
-import 'package:flutter_example/pages/widget_example/switch_checkbox_page.dart';
+import 'package:flutter_example/pages/widget_example/input_page.dart';
 import 'pages/member/member_page.dart';
 import 'pages/bloodpressure/bloodpressure_page.dart';
 
@@ -24,7 +25,8 @@ class _MemberAppState extends State<MemberApp> {
     const BloodPressurePage(),
     const BodyTemperaturePage(),
     const ProgressPage(),
-    const SwitchCheckboxPage()
+    const InputPage(),
+    const LayoutPage()
   ];
 //bottomNavigationBar
   final navigationitems = const [
@@ -35,8 +37,8 @@ class _MemberAppState extends State<MemberApp> {
         icon: Icon(Icons.thermostat), label: "BodyTemperature"),
     BottomNavigationBarItem(
         icon: Icon(Icons.now_widgets), label: "ProgressIndicator"),
-    BottomNavigationBarItem(
-        icon: Icon(Icons.now_widgets), label: "Switch Checkbox")
+    BottomNavigationBarItem(icon: Icon(Icons.now_widgets), label: "Input"),
+    BottomNavigationBarItem(icon: Icon(Icons.now_widgets), label: "Layout")
   ];
 //railNavigationBar
   NavigationRailLabelType labelType = NavigationRailLabelType.all;
@@ -156,7 +158,12 @@ class _MemberAppState extends State<MemberApp> {
                   NavigationRailDestination(
                     icon: Icon(Icons.now_widgets_outlined),
                     selectedIcon: Icon(Icons.now_widgets),
-                    label: Text('Switch Checkbox'),
+                    label: Text('Input'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.now_widgets_outlined),
+                    selectedIcon: Icon(Icons.now_widgets),
+                    label: Text('Layout'),
                   )
                 ],
               ),
