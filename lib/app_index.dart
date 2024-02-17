@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/my_router.dart';
 import 'package:flutter_example/pages/login/login_page.dart';
 import 'package:flutter_example/pages/weather/weather_page.dart';
@@ -11,13 +12,6 @@ class IndexApp extends StatefulWidget {
 }
 
 class _IndexAppState extends State<IndexApp> {
-//bottomNavigationBar
-  final navigationitems = const [
-    BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-    BottomNavigationBarItem(icon: Icon(Icons.login), label: "Login"),
-    BottomNavigationBarItem(icon: Icon(Icons.sunny), label: "Weather"),
-    BottomNavigationBarItem(icon: Icon(Icons.storage), label: "Localstorage"),
-  ];
   int _selectedIndex = 0;
   void _onItemTap(int index) {
     if (index == 3) {
@@ -27,14 +21,26 @@ class _IndexAppState extends State<IndexApp> {
     }
   }
 
-  final _bodyList = [
-    const HomePage(title: "home"),
-    const LoginPage(),
-    const WeatherPage()
-  ];
+  CustomLocalizations localizations = CustomLocalizations();
+  final _bodyList = const [HomePage(), LoginPage(), WeatherPage()];
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    List<BottomNavigationBarItem> navigationitems = [
+      BottomNavigationBarItem(
+          icon: const Icon(Icons.home),
+          label: CustomLocalizations.of(context)?.text("Home")),
+      BottomNavigationBarItem(
+          icon: const Icon(Icons.login),
+          label: CustomLocalizations.of(context)?.text("Login")),
+      BottomNavigationBarItem(
+          icon: const Icon(Icons.sunny),
+          label: CustomLocalizations.of(context)?.text("Weather")),
+      BottomNavigationBarItem(
+          icon: const Icon(Icons.storage),
+          label: CustomLocalizations.of(context)?.text("Localstorage")),
+    ];
+
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -55,6 +61,40 @@ class _IndexAppState extends State<IndexApp> {
                         Navigator.pushNamed(context, RouteName.firebase),
                     child: const Text('Firebase'))
               ],
+            ),
+            drawer: Drawer(
+              child: ListView(
+                children: <Widget>[
+                  DrawerHeader(
+                      decoration: const BoxDecoration(color: Colors.deepOrange),
+                      child: Text(
+                        CustomLocalizations.of(context)?.text("language") ?? "",
+                        style: const TextStyle(color: Colors.white),
+                      )),
+                  ListTile(
+                    leading: const Icon(Icons.language),
+                    title: Text(
+                        CustomLocalizations.of(context)?.text("en_us") ??
+                            "English"),
+                    onTap: () {
+                      Navigator.pop(context);
+                      localizations.setLocale(
+                          context, const Locale("en", "US"));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.language),
+                    title: Text(
+                        CustomLocalizations.of(context)?.text("zh_tw") ??
+                            "Chinese(Taiwan)"),
+                    onTap: () {
+                      Navigator.pop(context);
+                      localizations.setLocale(
+                          context, const Locale("zh", "TW"));
+                    },
+                  )
+                ],
+              ),
             ),
             bottomNavigationBar: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,

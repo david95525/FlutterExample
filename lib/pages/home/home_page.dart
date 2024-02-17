@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example/localizations.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.title});
-
-  final String title;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -16,7 +15,11 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
         length: tabList.length,
         child: Scaffold(
-            key: scaffoldKey, body: const Center(child: Text('Home Page'))));
+            key: scaffoldKey,
+            body: Center(
+                child: Text(
+                    CustomLocalizations.of(context)?.text('home_title') ??
+                        ''))));
   }
 }
 

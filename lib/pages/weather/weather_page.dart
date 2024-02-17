@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/models/weather/weather_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -42,7 +43,7 @@ class _WeatherPageState extends State<WeatherPage> {
                 style: const TextStyle(fontSize: 15),
               ),
               Text(
-                weather != null ? "平均氣溫:${weather?.temperature}" : "平均氣溫:",
+                "${CustomLocalizations.of(context)?.text("averagetemp")}:${weather?.temperature}",
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
               )
@@ -63,8 +64,8 @@ class _WeatherPageState extends State<WeatherPage> {
       'locationName': '南港區',
       'elementName': 'MinT,MaxT,PoP12h,T,Wx,WeatherDescription',
       'sort': 'time',
-      'timeFrom': '2024-02-18T00:00:00',
-      'timeTo': '2024-02-19T00:00:00'
+      'timeFrom': DateTime.now().toIso8601String(),
+      'timeTo': DateTime.now().add(const Duration(days: 1)).toIso8601String()
     });
     var response = await http.get(url).timeout(timeout);
     if (response.statusCode == 200) {

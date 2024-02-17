@@ -1,0 +1,13 @@
+{
+    "en_us":"English(US)",
+    "zh_tw":"Chinese(Taiwan)",
+    "home_title": "home page",
+    "Home":"Home",
+    "Weather":"Weather",
+    "Login": "Login",
+    "Localstorage":"Localstorage",
+    "language":"language",
+    "averagetemp":"Average Temperature",
+    "welcome_to": "Welcome to",
+    "sign_up": "SIGN UP"
+}

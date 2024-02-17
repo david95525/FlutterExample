@@ -1,0 +1,13 @@
+{
+  "en_us":"英文(美國)",
+  "zh_tw":"中文(台灣)",
+  "home_title": "首頁頁面",
+  "Home":"首頁",
+  "Weather":"天氣",
+  "Login": "登入",
+  "Localstorage":"本地儲存",
+  "language":"語言",
+  "averagetemp":"平均氣溫",
+  "welcome_to": "歡迎使用",
+  "sign_up": "註冊"
+}

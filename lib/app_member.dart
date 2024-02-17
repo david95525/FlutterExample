@@ -72,40 +72,7 @@ class _MemberAppState extends State<MemberApp> {
                       Navigator.pushNamed(context, RouteName.index),
                 )
               ],
-            ),
-            drawer: Drawer(
-              child: ListView(
-                children: <Widget>[
-                  UserAccountsDrawerHeader(
-                    accountName: const Text('Jen'),
-                    accountEmail: const Text('userGmail@gmail.com'),
-                    currentAccountPicture: Image.asset('assets/waiting.gif'),
-                    decoration: const BoxDecoration(color: Colors.deepOrange),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.favorite),
-                    title: const Text('Item1'),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.headset),
-                    title: const Text('Item2'),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.star),
-                    title: const Text('Item3'),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
+            ),           
             bottomNavigationBar: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
                 items: navigationitems,
