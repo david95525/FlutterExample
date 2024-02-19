@@ -4,6 +4,7 @@ import 'package:flutter_example/pages/bodytemperature/bodytemperature_page.dart'
 import 'package:flutter_example/pages/widget_example/layout_page.dart';
 import 'package:flutter_example/pages/widget_example/progressIndicator_page.dart';
 import 'package:flutter_example/pages/widget_example/input_page.dart';
+import 'package:flutter_example/pages/widget_example/listview_page.dart';
 import 'pages/member/member_page.dart';
 import 'pages/bloodpressure/bloodpressure_page.dart';
 
@@ -24,23 +25,8 @@ class _MemberAppState extends State<MemberApp> {
     const MemberPage(),
     const BloodPressurePage(),
     const BodyTemperaturePage(),
-    const ProgressPage(),
-    const InputPage(),
-    const LayoutPage()
+    const ProgressPage()
   ];
-//bottomNavigationBar
-  final navigationitems = const [
-    BottomNavigationBarItem(icon: Icon(Icons.calculate), label: "Member"),
-    BottomNavigationBarItem(
-        icon: Icon(Icons.bloodtype_sharp), label: "BloodPressure"),
-    BottomNavigationBarItem(
-        icon: Icon(Icons.thermostat), label: "BodyTemperature"),
-    BottomNavigationBarItem(
-        icon: Icon(Icons.now_widgets), label: "ProgressIndicator"),
-    BottomNavigationBarItem(icon: Icon(Icons.now_widgets), label: "Input"),
-    BottomNavigationBarItem(icon: Icon(Icons.now_widgets), label: "Layout")
-  ];
-//railNavigationBar
   NavigationRailLabelType labelType = NavigationRailLabelType.all;
   bool showLeading = false;
   bool showTrailing = false;
@@ -48,7 +34,7 @@ class _MemberAppState extends State<MemberApp> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 2,
+        length: 4,
         child: Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
@@ -72,12 +58,17 @@ class _MemberAppState extends State<MemberApp> {
                       Navigator.pushNamed(context, RouteName.index),
                 )
               ],
-            ),           
-            bottomNavigationBar: BottomNavigationBar(
-                type: BottomNavigationBarType.fixed,
-                items: navigationitems,
-                onTap: _onItemTap,
-                currentIndex: _selectedIndex),
+              title: _selectedIndex > 2
+                  ? const TabBar(
+                      tabs: [
+                        Tab(text: 'ProgressIndicator'),
+                        Tab(text: 'Input'),
+                        Tab(text: 'Layout'),
+                        Tab(text: 'ListView'),
+                      ],
+                    )
+                  : null,
+            ),
             body: Row(children: <Widget>[
               NavigationRail(
                 selectedIndex: _selectedIndex,
@@ -87,17 +78,13 @@ class _MemberAppState extends State<MemberApp> {
                 leading: showLeading
                     ? FloatingActionButton(
                         elevation: 0,
-                        onPressed: () {
-                          // Add your onPressed code here!
-                        },
+                        onPressed: () {},
                         child: const Icon(Icons.add),
                       )
                     : const SizedBox(),
                 trailing: showTrailing
                     ? IconButton(
-                        onPressed: () {
-                          // Add your onPressed code here!
-                        },
+                        onPressed: () {},
                         icon: const Icon(Icons.more_horiz_rounded),
                       )
                     : const SizedBox(),
@@ -120,23 +107,23 @@ class _MemberAppState extends State<MemberApp> {
                   NavigationRailDestination(
                     icon: Icon(Icons.now_widgets_outlined),
                     selectedIcon: Icon(Icons.now_widgets),
-                    label: Text('ProgressIndicator'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.now_widgets_outlined),
-                    selectedIcon: Icon(Icons.now_widgets),
-                    label: Text('Input'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.now_widgets_outlined),
-                    selectedIcon: Icon(Icons.now_widgets),
-                    label: Text('Layout'),
+                    label: Text('widgets'),
                   )
                 ],
               ),
               const VerticalDivider(thickness: 1, width: 1),
               // This is the main content.
-              Expanded(child: _bodyList[_selectedIndex]),
+              Expanded(
+                  child: _selectedIndex <= 2
+                      ? _bodyList[_selectedIndex]
+                      : const TabBarView(
+                          children: [
+                            ProgressPage(),
+                            InputPage(),
+                            LayoutPage(),
+                            ListViewPage()
+                          ],
+                        )),
             ])));
   }
 }

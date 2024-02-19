@@ -10,6 +10,8 @@ class _InputPageState extends State<InputPage> {
   bool _switchSelected = true;
   bool? _checkboxSelected = true;
   final TextEditingController _inputfieldController = TextEditingController();
+  final TextEditingController _birthdayController =
+      TextEditingController(text: DateTime(1990, 1, 1).toIso8601String());
   //form
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -18,6 +20,13 @@ class _InputPageState extends State<InputPage> {
   void initState() {
     _inputfieldController.addListener(_inputfieldChanged);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _inputfieldController.removeListener(_inputfieldChanged);
+    _inputfieldController.dispose();
   }
 
   @override
@@ -38,6 +47,15 @@ class _InputPageState extends State<InputPage> {
               borderSide: BorderSide(color: Colors.blue),
             ),
           ),
+        ),
+        TextField(
+          autofocus: true,
+          controller: _birthdayController,
+          decoration: const InputDecoration(
+              labelText: "birthday",
+              hintText: "birthday",
+              prefixIcon: Icon(Icons.person)),
+          onTap: () => _DateInput(),
         ),
         Switch(
           value: _switchSelected,
@@ -110,5 +128,25 @@ class _InputPageState extends State<InputPage> {
 
   void _inputfieldChanged() {
     debugPrint(_inputfieldController.text);
+  }
+
+  void _DateInput() async {
+    DateTime? result = await _showDatePicker();
+    if (result != null) {
+      String formattedDate = result.toIso8601String();
+      setState(() {
+        _birthdayController.text = formattedDate;
+      });
+    }
+  }
+
+  Future<DateTime?> _showDatePicker() {
+    var date = DateTime.now();
+    return showDatePicker(
+      context: context,
+      initialDate: date,
+      firstDate: date.subtract(const Duration(days: 365)),
+      lastDate: date,
+    );
   }
 }

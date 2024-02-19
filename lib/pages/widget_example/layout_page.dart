@@ -27,7 +27,7 @@ class _LayoutPageState extends State<LayoutPage> {
           ),
         ),
         ConstrainedBox(
-            constraints: const BoxConstraints(minWidth: 60.0, minHeight: 100.0),
+            constraints: const BoxConstraints(minWidth: 60.0, minHeight: 50.0),
             child: UnconstrainedBox(
               child: ConstrainedBox(
                 constraints:
@@ -66,7 +66,7 @@ class _LayoutPageState extends State<LayoutPage> {
           children: <Widget>[
             Text(
               " hello world ",
-              style: TextStyle(fontSize: 30.0),
+              style: TextStyle(fontSize: 20.0),
             ),
             Text(" I am Jack "),
           ],
@@ -122,8 +122,8 @@ class _LayoutPageState extends State<LayoutPage> {
           alignment: Alignment.center,
           children: <Widget>[
             Container(
-              width: 200,
-              height: 50,
+              width: 50,
+              height: 20,
               color: Colors.blue,
               child: const Text("Hello world",
                   style: TextStyle(color: Colors.white)),
@@ -150,7 +150,7 @@ class _LayoutPageState extends State<LayoutPage> {
                       blurRadius: 4.0)
                 ]),
             child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 18.0),
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
               child: Text(
                 "Login",
                 style: TextStyle(color: Colors.white),

@@ -24,6 +24,7 @@ class _IndexAppState extends State<IndexApp> {
   CustomLocalizations localizations = CustomLocalizations();
   final _bodyList = const [HomePage(), LoginPage(), WeatherPage()];
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     List<BottomNavigationBarItem> navigationitems = [
@@ -42,7 +43,7 @@ class _IndexAppState extends State<IndexApp> {
     ];
 
     return DefaultTabController(
-        length: 2,
+        length: 4,
         child: Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
@@ -55,6 +56,15 @@ class _IndexAppState extends State<IndexApp> {
                   ),
                   onPressed: () =>
                       Navigator.pushNamed(context, RouteName.member),
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.language,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    await changeLanguage();
+                  },
                 ),
                 TextButton(
                     onPressed: () =>
@@ -102,5 +112,40 @@ class _IndexAppState extends State<IndexApp> {
                 onTap: _onItemTap,
                 currentIndex: _selectedIndex),
             body: _bodyList[_selectedIndex]));
+  }
+
+  Future<void> changeLanguage() async {
+    await showDialog<int>(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Text(CustomLocalizations.of(context)?.text("language") ??
+                "language"),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  localizations.setLocale(context, const Locale("en", "US"));
+                  Navigator.pop(context, 1);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Text(CustomLocalizations.of(context)?.text("en_us") ??
+                      "English"),
+                ),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  localizations.setLocale(context, const Locale("zh", "TW"));
+                  Navigator.pop(context, 2);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Text(CustomLocalizations.of(context)?.text("zh_tw") ??
+                      "Chinese(Taiwan)"),
+                ),
+              ),
+            ],
+          );
+        });
   }
 }
