@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example/my_router.dart';
+import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/pages/bodytemperature/bodytemperature_page.dart';
 import 'package:flutter_example/pages/widget_example/layout_page.dart';
 import 'package:flutter_example/pages/widget_example/progressIndicator_page.dart';
 import 'package:flutter_example/pages/widget_example/input_page.dart';
 import 'package:flutter_example/pages/widget_example/listview_page.dart';
-import 'pages/member/member_page.dart';
+import 'pages/dashboard/dashboard_page.dart';
 import 'pages/bloodpressure/bloodpressure_page.dart';
 
 class MemberApp extends StatefulWidget {
@@ -16,21 +17,18 @@ class MemberApp extends StatefulWidget {
 
 class _MemberAppState extends State<MemberApp> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  CustomLocalizations localizations = CustomLocalizations();
   int _selectedIndex = 0;
   void _onItemTap(int index) {
     setState(() => _selectedIndex = index);
   }
 
   final _bodyList = [
-    const MemberPage(),
+    const DahboardPage(),
+    const ProgressPage(),
     const BloodPressurePage(),
     const BodyTemperaturePage(),
-    const ProgressPage()
   ];
-  NavigationRailLabelType labelType = NavigationRailLabelType.all;
-  bool showLeading = false;
-  bool showTrailing = false;
-  double groupAlignment = -1.0;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -39,15 +37,6 @@ class _MemberAppState extends State<MemberApp> {
             key: scaffoldKey,
             appBar: AppBar(
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-              leading: IconButton(
-                  icon: const Icon(Icons.favorite, color: Colors.red),
-                  onPressed: () {
-                    if (scaffoldKey.currentState!.isDrawerOpen) {
-                      scaffoldKey.currentState!.closeDrawer();
-                    } else {
-                      scaffoldKey.currentState!.openDrawer();
-                    }
-                  }),
               actions: [
                 IconButton(
                   icon: const Icon(
@@ -56,9 +45,18 @@ class _MemberAppState extends State<MemberApp> {
                   ),
                   onPressed: () =>
                       Navigator.pushNamed(context, RouteName.index),
-                )
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.language,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    await changeLanguage();
+                  },
+                ),
               ],
-              title: _selectedIndex > 2
+              title: _selectedIndex == 1
                   ? const TabBar(
                       tabs: [
                         Tab(text: 'ProgressIndicator'),
@@ -69,61 +67,155 @@ class _MemberAppState extends State<MemberApp> {
                     )
                   : null,
             ),
-            body: Row(children: <Widget>[
-              NavigationRail(
-                selectedIndex: _selectedIndex,
-                groupAlignment: groupAlignment,
-                onDestinationSelected: _onItemTap,
-                labelType: labelType,
-                leading: showLeading
-                    ? FloatingActionButton(
-                        elevation: 0,
-                        onPressed: () {},
-                        child: const Icon(Icons.add),
-                      )
-                    : const SizedBox(),
-                trailing: showTrailing
-                    ? IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.more_horiz_rounded),
-                      )
-                    : const SizedBox(),
-                destinations: const <NavigationRailDestination>[
-                  NavigationRailDestination(
-                    icon: Icon(Icons.calculate),
-                    selectedIcon: Icon(Icons.calculate),
-                    label: Text('Member'),
+            body: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  NavigationRail(
+                    selectedIndex: _selectedIndex,
+                    onDestinationSelected: _onItemTap,
+                    labelType: NavigationRailLabelType.none,
+                    minWidth: MediaQuery.of(context).size.width / 7,
+                    backgroundColor: const Color.fromARGB(255, 29, 65, 133),
+                    leading: Container(
+                      height: MediaQuery.of(context).size.height / 6,
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "Company",
+                        style: TextStyle(fontSize: 40, color: Colors.white),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        softWrap: true,
+                      ),
+                    ),
+                    destinations: <NavigationRailDestination>[
+                      NavigationRailDestination(
+                        icon: Container(
+                            height: MediaQuery.of(context).size.height / 7,
+                            alignment: Alignment.center,
+                            child: Icon(Icons.calculate,
+                                size: MediaQuery.of(context).size.height / 10,
+                                color: Colors.white)),
+                        selectedIcon: Container(
+                            height: MediaQuery.of(context).size.height / 7,
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(100),
+                                    bottomLeft: Radius.circular(100)),
+                                color: Colors.white),
+                            child: Icon(Icons.calculate,
+                                size: MediaQuery.of(context).size.height / 10,
+                                color: const Color.fromARGB(255, 29, 65, 133))),
+                        label: const Text('Member'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Container(
+                            height: MediaQuery.of(context).size.height / 7,
+                            alignment: Alignment.center,
+                            child: Icon(Icons.now_widgets_outlined,
+                                size: MediaQuery.of(context).size.height / 10,
+                                color: Colors.white)),
+                        selectedIcon: Container(
+                            height: MediaQuery.of(context).size.height / 7,
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(100),
+                                    bottomLeft: Radius.circular(100)),
+                                color: Colors.white),
+                            child: Icon(Icons.now_widgets,
+                                size: MediaQuery.of(context).size.height / 10,
+                                color: const Color.fromARGB(255, 29, 65, 133))),
+                        label: const Text('widgets'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Container(
+                            height: MediaQuery.of(context).size.height / 7,
+                            alignment: Alignment.center,
+                            child: Icon(Icons.bloodtype_sharp,
+                                size: MediaQuery.of(context).size.height / 10,
+                                color: Colors.white)),
+                        selectedIcon: Container(
+                            height: MediaQuery.of(context).size.height / 7,
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(100),
+                                    bottomLeft: Radius.circular(100)),
+                                color: Colors.white),
+                            child: Icon(Icons.bloodtype_sharp,
+                                size: MediaQuery.of(context).size.height / 10,
+                                color: const Color.fromARGB(255, 29, 65, 133))),
+                        label: const Text('BloodPressure'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Container(
+                            height: MediaQuery.of(context).size.height / 7,
+                            alignment: Alignment.center,
+                            child: Icon(Icons.thermostat,
+                                size: MediaQuery.of(context).size.height / 10,
+                                color: Colors.white)),
+                        selectedIcon: Container(
+                            height: MediaQuery.of(context).size.height / 7,
+                            alignment: Alignment.center,
+                            decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(100),
+                                    bottomLeft: Radius.circular(100)),
+                                color: Colors.white),
+                            child: Icon(Icons.thermostat,
+                                size: MediaQuery.of(context).size.height / 10,
+                                color: const Color.fromARGB(255, 29, 65, 133))),
+                        label: const Text('BodyTemperature'),
+                      ),
+                    ],
                   ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.bloodtype_sharp),
-                    selectedIcon: Icon(Icons.bloodtype_sharp),
-                    label: Text('BloodPressure'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.thermostat),
-                    selectedIcon: Icon(Icons.thermostat),
-                    label: Text('BodyTemperature'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.now_widgets_outlined),
-                    selectedIcon: Icon(Icons.now_widgets),
-                    label: Text('widgets'),
-                  )
-                ],
+                  Expanded(
+                      child: _selectedIndex != 1
+                          ? _bodyList[_selectedIndex]
+                          : const TabBarView(
+                              children: [
+                                ProgressPage(),
+                                InputPage(),
+                                LayoutPage(),
+                                ListViewPage()
+                              ],
+                            )),
+                ])));
+  }
+
+  Future<void> changeLanguage() async {
+    await showDialog<int>(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Text(CustomLocalizations.of(context)?.text("language") ??
+                "language"),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  localizations.setLocale(context, const Locale("en", "US"));
+                  Navigator.pop(context, 1);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Text(CustomLocalizations.of(context)?.text("en_us") ??
+                      "English"),
+                ),
               ),
-              const VerticalDivider(thickness: 1, width: 1),
-              // This is the main content.
-              Expanded(
-                  child: _selectedIndex <= 2
-                      ? _bodyList[_selectedIndex]
-                      : const TabBarView(
-                          children: [
-                            ProgressPage(),
-                            InputPage(),
-                            LayoutPage(),
-                            ListViewPage()
-                          ],
-                        )),
-            ])));
+              SimpleDialogOption(
+                onPressed: () {
+                  localizations.setLocale(context, const Locale("zh", "TW"));
+                  Navigator.pop(context, 2);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Text(CustomLocalizations.of(context)?.text("zh_tw") ??
+                      "Chinese(Taiwan)"),
+                ),
+              ),
+            ],
+          );
+        });
   }
 }

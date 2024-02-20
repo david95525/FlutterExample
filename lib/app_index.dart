@@ -13,14 +13,6 @@ class IndexApp extends StatefulWidget {
 
 class _IndexAppState extends State<IndexApp> {
   int _selectedIndex = 0;
-  void _onItemTap(int index) {
-    if (index == 3) {
-      Navigator.pushNamed(context, RouteName.localstorage);
-    } else {
-      setState(() => _selectedIndex = index);
-    }
-  }
-
   CustomLocalizations localizations = CustomLocalizations();
   final _bodyList = const [HomePage(), LoginPage(), WeatherPage()];
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -56,15 +48,6 @@ class _IndexAppState extends State<IndexApp> {
                   ),
                   onPressed: () =>
                       Navigator.pushNamed(context, RouteName.member),
-                ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.language,
-                    color: Colors.white,
-                  ),
-                  onPressed: () async {
-                    await changeLanguage();
-                  },
                 ),
                 TextButton(
                     onPressed: () =>
@@ -114,38 +97,11 @@ class _IndexAppState extends State<IndexApp> {
             body: _bodyList[_selectedIndex]));
   }
 
-  Future<void> changeLanguage() async {
-    await showDialog<int>(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: Text(CustomLocalizations.of(context)?.text("language") ??
-                "language"),
-            children: <Widget>[
-              SimpleDialogOption(
-                onPressed: () {
-                  localizations.setLocale(context, const Locale("en", "US"));
-                  Navigator.pop(context, 1);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Text(CustomLocalizations.of(context)?.text("en_us") ??
-                      "English"),
-                ),
-              ),
-              SimpleDialogOption(
-                onPressed: () {
-                  localizations.setLocale(context, const Locale("zh", "TW"));
-                  Navigator.pop(context, 2);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Text(CustomLocalizations.of(context)?.text("zh_tw") ??
-                      "Chinese(Taiwan)"),
-                ),
-              ),
-            ],
-          );
-        });
+  void _onItemTap(int index) {
+    if (index == 3) {
+      Navigator.pushNamed(context, RouteName.localstorage);
+    } else {
+      setState(() => _selectedIndex = index);
+    }
   }
 }
