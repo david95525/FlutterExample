@@ -31,6 +31,7 @@ class _MemberAppState extends State<MemberApp> {
   ];
   @override
   Widget build(BuildContext context) {
+    Color? _backcolor = Colors.grey[100];
     return DefaultTabController(
         length: 4,
         child: Scaffold(
@@ -79,9 +80,9 @@ class _MemberAppState extends State<MemberApp> {
                     leading: Container(
                       height: MediaQuery.of(context).size.height / 6,
                       alignment: Alignment.center,
-                      child: const Text(
+                      child: Text(
                         "Company",
-                        style: TextStyle(fontSize: 40, color: Colors.white),
+                        style: TextStyle(fontSize: 40, color: _backcolor),
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         softWrap: true,
@@ -94,15 +95,15 @@ class _MemberAppState extends State<MemberApp> {
                             alignment: Alignment.center,
                             child: Icon(Icons.calculate,
                                 size: MediaQuery.of(context).size.height / 10,
-                                color: Colors.white)),
+                                color: _backcolor)),
                         selectedIcon: Container(
                             height: MediaQuery.of(context).size.height / 7,
                             alignment: Alignment.center,
-                            decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
+                            decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(100),
                                     bottomLeft: Radius.circular(100)),
-                                color: Colors.white),
+                                color: _backcolor),
                             child: Icon(Icons.calculate,
                                 size: MediaQuery.of(context).size.height / 10,
                                 color: const Color.fromARGB(255, 29, 65, 133))),
@@ -114,15 +115,15 @@ class _MemberAppState extends State<MemberApp> {
                             alignment: Alignment.center,
                             child: Icon(Icons.now_widgets_outlined,
                                 size: MediaQuery.of(context).size.height / 10,
-                                color: Colors.white)),
+                                color: _backcolor)),
                         selectedIcon: Container(
                             height: MediaQuery.of(context).size.height / 7,
                             alignment: Alignment.center,
-                            decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
+                            decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(100),
                                     bottomLeft: Radius.circular(100)),
-                                color: Colors.white),
+                                color: _backcolor),
                             child: Icon(Icons.now_widgets,
                                 size: MediaQuery.of(context).size.height / 10,
                                 color: const Color.fromARGB(255, 29, 65, 133))),
@@ -134,15 +135,15 @@ class _MemberAppState extends State<MemberApp> {
                             alignment: Alignment.center,
                             child: Icon(Icons.bloodtype_sharp,
                                 size: MediaQuery.of(context).size.height / 10,
-                                color: Colors.white)),
+                                color: _backcolor)),
                         selectedIcon: Container(
                             height: MediaQuery.of(context).size.height / 7,
                             alignment: Alignment.center,
-                            decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
+                            decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(100),
                                     bottomLeft: Radius.circular(100)),
-                                color: Colors.white),
+                                color: _backcolor),
                             child: Icon(Icons.bloodtype_sharp,
                                 size: MediaQuery.of(context).size.height / 10,
                                 color: const Color.fromARGB(255, 29, 65, 133))),
@@ -154,15 +155,15 @@ class _MemberAppState extends State<MemberApp> {
                             alignment: Alignment.center,
                             child: Icon(Icons.thermostat,
                                 size: MediaQuery.of(context).size.height / 10,
-                                color: Colors.white)),
+                                color: _backcolor)),
                         selectedIcon: Container(
                             height: MediaQuery.of(context).size.height / 7,
                             alignment: Alignment.center,
-                            decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
+                            decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(100),
                                     bottomLeft: Radius.circular(100)),
-                                color: Colors.white),
+                                color: _backcolor),
                             child: Icon(Icons.thermostat,
                                 size: MediaQuery.of(context).size.height / 10,
                                 color: const Color.fromARGB(255, 29, 65, 133))),
