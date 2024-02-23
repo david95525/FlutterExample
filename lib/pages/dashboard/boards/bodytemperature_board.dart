@@ -14,25 +14,30 @@ class BodyTemperatureBoard extends StatelessWidget {
             top: MediaQuery.of(context).size.height * 0.02),
         color: Colors.white,
         children: [
-          Container(
-              alignment: Alignment.topLeft,
-              padding: const EdgeInsets.only(left: 10),
-              child: const Icon(
-                Icons.thermostat,
-                size: 50,
-                color: Color.fromARGB(255, 29, 65, 133),
-              )),
-          Container(
-            padding: const EdgeInsets.only(left: 10, top: 10),
-            child: const Text("Body Temperature",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-          ),
-          Container(
-              padding: EdgeInsets.only(left: 10),
-              child: const Text(
-                "97 °F",
-                style: TextStyle(fontSize: 30),
-              ))
+          Wrap(crossAxisAlignment: WrapCrossAlignment.start, children: [
+            Container(
+                padding: const EdgeInsets.only(left: 10),
+                child: const Icon(
+                  Icons.thermostat,
+                  size: 50,
+                  color: Color.fromARGB(255, 29, 65, 133),
+                )),
+            Container(
+              padding: const EdgeInsets.only(left: 10, top: 10),
+              child: const Text("Body Temperature",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            )
+          ]),
+          Wrap(children: [
+            Container(
+                alignment: Alignment.bottomRight,
+                padding: EdgeInsets.only(
+                    right: 10, top: MediaQuery.of(context).size.height * 0.05),
+                child: const Text(
+                  "97 °F",
+                  style: TextStyle(fontSize: 30),
+                ))
+          ]),
         ]);
   }
 }

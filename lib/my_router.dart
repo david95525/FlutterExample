@@ -5,35 +5,40 @@ import 'package:flutter_example/pages/firebase/firebase_login/firebase_login_pag
 import 'package:flutter_example/pages/local_storage/local_storage.dart';
 
 class RouteName {
-  static const String index = 'index';
-  static const String member = 'member';
-  static const String firebase = 'firebase';
-  static const String localstorage = 'localstorage';
+  static const String index = '/';
+  static const String member = '/member';
+  static const String firebase = '/firebase';
+  static const String localstorage = '/localstorage';
 }
 
 class MyRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteName.index:
-        return NoAnimRouteBuilder(const IndexApp());
+        return NoAnimRouteBuilder(const IndexApp(), RouteName.index);
       case RouteName.member:
-        return NoAnimRouteBuilder(const MemberApp());
+        return NoAnimRouteBuilder(const MemberApp(), RouteName.member);
       case RouteName.firebase:
-        return NoAnimRouteBuilder(const FirebaseLoginPage());
+        return NoAnimRouteBuilder(
+            const FirebaseLoginPage(), RouteName.firebase);
       case RouteName.localstorage:
-        return NoAnimRouteBuilder(const LocalStorageApp());
+        return MaterialPageRoute(
+            builder: (context) => const LocalStorageApp(),
+            settings: const RouteSettings(name: RouteName.localstorage));
       default:
-        return NoAnimRouteBuilder(const IndexApp());
+        return NoAnimRouteBuilder(const IndexApp(), RouteName.index);
     }
   }
 }
 
 class NoAnimRouteBuilder extends PageRouteBuilder {
   final Widget page;
+  final String routename;
 
-  NoAnimRouteBuilder(this.page)
+  NoAnimRouteBuilder(this.page, this.routename)
       : super(
             opaque: false,
+            settings: RouteSettings(name: routename),
             pageBuilder: (context, animation, secondaryAnimation) => page,
             transitionDuration: const Duration(milliseconds: 1),
             transitionsBuilder:

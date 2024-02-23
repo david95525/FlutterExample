@@ -35,7 +35,7 @@ class _DahboardPageState extends State<DahboardPage> {
               onPressed: () => debugPrint("save"),
               style: TextButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 29, 65, 133)),
-              child: const Text('Save', style: TextStyle(color: Colors.white)),
+              child: const Text('Save', style: TextStyle(color: Colors.white,fontSize: 30)),
             ),
           )
         ])
