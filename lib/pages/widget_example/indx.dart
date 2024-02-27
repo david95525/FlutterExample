@@ -21,41 +21,40 @@ class _WidgetsPageState extends State<WidgetsPage> {
     return DefaultTabController(
         length: 5,
         child: Scaffold(
-            key: scaffoldKey,
-            appBar: AppBar(
-              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-              actions: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.language,
-                    color: Colors.white,
-                  ),
-                  onPressed: () async {
-                    await changeLanguage();
-                  },
+          key: scaffoldKey,
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            actions: [
+              IconButton(
+                icon: const Icon(
+                  Icons.language,
+                  color: Colors.white,
                 ),
+                onPressed: () async {
+                  await changeLanguage();
+                },
+              ),
+            ],
+            title: const TabBar(
+              tabs: [
+                Tab(text: 'ProgressIndicator'),
+                Tab(text: 'Input'),
+                Tab(text: 'Layout'),
+                Tab(text: 'ListView'),
+                Tab(text: 'Events')
               ],
-              title: const TabBar(
-                tabs: [
-                  Tab(text: 'ProgressIndicator'),
-                  Tab(text: 'Input'),
-                  Tab(text: 'Layout'),
-                  Tab(text: 'ListView'),
-                  Tab(text: 'Events')
-                ],
-              ),
             ),
-            body: const Expanded(
-              child: TabBarView(
-                children: [
-                  ProgressPage(),
-                  InputPage(),
-                  LayoutPage(),
-                  ListViewPage(),
-                  EventsPage()
-                ],
-              ),
-            )));
+          ),
+          body: const TabBarView(
+            children: [
+              ProgressPage(),
+              InputPage(),
+              LayoutPage(),
+              ListViewPage(),
+              EventsPage()
+            ],
+          ),
+        ));
   }
 
   Future<void> changeLanguage() async {
