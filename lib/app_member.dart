@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_example/my_router.dart';
 import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/pages/bodytemperature/bodytemperature_page.dart';
-import 'package:flutter_example/pages/widget_example/layout_page.dart';
 import 'package:flutter_example/pages/widget_example/progressIndicator_page.dart';
-import 'package:flutter_example/pages/widget_example/input_page.dart';
-import 'package:flutter_example/pages/widget_example/listview_page.dart';
 import 'pages/dashboard/dashboard_page.dart';
 import 'pages/bloodpressure/bloodpressure_page.dart';
 
@@ -24,8 +21,7 @@ class _MemberAppState extends State<MemberApp> {
   }
 
   final _bodyList = [
-    const DahboardPage(),
-    const ProgressPage(),
+    const DashboardPage(),
     const BloodPressurePage(),
     const BodyTemperaturePage(),
   ];
@@ -57,16 +53,6 @@ class _MemberAppState extends State<MemberApp> {
                   },
                 ),
               ],
-              title: _selectedIndex == 1
-                  ? const TabBar(
-                      tabs: [
-                        Tab(text: 'ProgressIndicator'),
-                        Tab(text: 'Input'),
-                        Tab(text: 'Layout'),
-                        Tab(text: 'ListView'),
-                      ],
-                    )
-                  : null,
             ),
             body: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -113,26 +99,6 @@ class _MemberAppState extends State<MemberApp> {
                         icon: Container(
                             height: MediaQuery.of(context).size.height / 7,
                             alignment: Alignment.center,
-                            child: Icon(Icons.now_widgets_outlined,
-                                size: MediaQuery.of(context).size.height / 10,
-                                color: _backcolor)),
-                        selectedIcon: Container(
-                            height: MediaQuery.of(context).size.height / 7,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(100),
-                                    bottomLeft: Radius.circular(100)),
-                                color: _backcolor),
-                            child: Icon(Icons.now_widgets,
-                                size: MediaQuery.of(context).size.height / 10,
-                                color: const Color.fromARGB(255, 29, 65, 133))),
-                        label: const Text('widgets'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Container(
-                            height: MediaQuery.of(context).size.height / 7,
-                            alignment: Alignment.center,
                             child: Icon(Icons.bloodtype_sharp,
                                 size: MediaQuery.of(context).size.height / 10,
                                 color: _backcolor)),
@@ -171,17 +137,7 @@ class _MemberAppState extends State<MemberApp> {
                       ),
                     ],
                   ),
-                  Expanded(
-                      child: _selectedIndex != 1
-                          ? _bodyList[_selectedIndex]
-                          : const TabBarView(
-                              children: [
-                                ProgressPage(),
-                                InputPage(),
-                                LayoutPage(),
-                                ListViewPage()
-                              ],
-                            )),
+                  Expanded(child: _bodyList[_selectedIndex]),
                 ])));
   }
 

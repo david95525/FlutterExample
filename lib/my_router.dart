@@ -3,12 +3,14 @@ import 'package:flutter_example/app_index.dart';
 import 'package:flutter_example/app_member.dart';
 import 'package:flutter_example/pages/firebase/firebase_login/firebase_login_page.dart';
 import 'package:flutter_example/pages/local_storage/local_storage.dart';
+import 'package:flutter_example/pages/widget_example/indx.dart';
 
 class RouteName {
   static const String index = '/';
   static const String member = '/member';
   static const String firebase = '/firebase';
   static const String localstorage = '/localstorage';
+  static const String widgets = '/widgets';
 }
 
 class MyRouter {
@@ -21,6 +23,8 @@ class MyRouter {
       case RouteName.firebase:
         return NoAnimRouteBuilder(
             const FirebaseLoginPage(), RouteName.firebase);
+      case RouteName.widgets:
+        return NoAnimRouteBuilder(const WidgetsPage(), RouteName.widgets);
       case RouteName.localstorage:
         return MaterialPageRoute(
             builder: (context) => const LocalStorageApp(),

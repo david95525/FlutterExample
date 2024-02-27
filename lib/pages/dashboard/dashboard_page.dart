@@ -6,14 +6,14 @@ import 'package:flutter_example/pages/dashboard/boards/oxygen_board.dart';
 import 'package:flutter_example/pages/dashboard/boards/pain_board.dart';
 import 'package:flutter_example/pages/dashboard/boards/user_board.dart';
 
-class DahboardPage extends StatefulWidget {
-  const DahboardPage({super.key});
+class DashboardPage extends StatefulWidget {
+  const DashboardPage({super.key});
 
   @override
-  State<DahboardPage> createState() => _DahboardPageState();
+  State<DashboardPage> createState() => _DashboardPageState();
 }
 
-class _DahboardPageState extends State<DahboardPage> {
+class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Container(

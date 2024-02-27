@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/my_router.dart';
 import 'package:flutter_example/pages/login/login_page.dart';
-import 'package:flutter_example/pages/weather/weather_page.dart';
 import 'pages/home/home_page.dart';
 
 class IndexApp extends StatefulWidget {
@@ -14,7 +13,7 @@ class IndexApp extends StatefulWidget {
 class _IndexAppState extends State<IndexApp> {
   int _selectedIndex = 0;
   CustomLocalizations localizations = CustomLocalizations();
-  final _bodyList = const [HomePage(), LoginPage(), WeatherPage()];
+  final _bodyList = const [HomePage(), LoginPage()];
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -26,9 +25,6 @@ class _IndexAppState extends State<IndexApp> {
       BottomNavigationBarItem(
           icon: const Icon(Icons.login),
           label: CustomLocalizations.of(context)?.text("Login")),
-      BottomNavigationBarItem(
-          icon: const Icon(Icons.sunny),
-          label: CustomLocalizations.of(context)?.text("Weather")),
       BottomNavigationBarItem(
           icon: const Icon(Icons.storage),
           label: CustomLocalizations.of(context)?.text("Localstorage")),
@@ -49,10 +45,16 @@ class _IndexAppState extends State<IndexApp> {
                   onPressed: () =>
                       Navigator.pushNamed(context, RouteName.member),
                 ),
+                IconButton(
+                    tooltip: "Widgets",
+                    onPressed: () =>
+                        Navigator.pushNamed(context, RouteName.widgets),
+                    icon: const Icon(Icons.now_widgets_outlined),
+                    selectedIcon: const Icon(Icons.now_widgets)),
                 TextButton(
                     onPressed: () =>
                         Navigator.pushNamed(context, RouteName.firebase),
-                    child: const Text('Firebase'))
+                    child: const Text('Firebase')),
               ],
             ),
             drawer: Drawer(
@@ -98,7 +100,7 @@ class _IndexAppState extends State<IndexApp> {
   }
 
   void _onItemTap(int index) {
-    if (index == 3) {
+    if (index == 2) {
       Navigator.pushNamed(context, RouteName.localstorage);
     } else {
       setState(() => _selectedIndex = index);

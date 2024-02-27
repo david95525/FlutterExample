@@ -34,7 +34,7 @@ class _ProgressPageState extends State<ProgressPage>
         children: <Widget>[
           SizedBox(
             height: 3,
-            width: 500,
+            width: 200,
             child: LinearProgressIndicator(
               backgroundColor: Colors.grey[200],
               valueColor: ColorTween(begin: Colors.red, end: Colors.green)
