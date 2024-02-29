@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example/provider/member_provider.dart';
 import 'package:flutter_example/widgets/custom_board.dart';
+import 'package:provider/provider.dart';
 
 class UserBoard extends StatelessWidget {
   const UserBoard({super.key});
@@ -29,25 +31,25 @@ class UserBoard extends StatelessWidget {
                 padding: EdgeInsets.only(
                     left: MediaQuery.of(context).size.width * 0.02,
                     right: MediaQuery.of(context).size.width * 0.02),
-                child: const Column(
+                child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("2023-02-21 22:45"),
+                      const Text("2023-02-21 22:45"),
                       Text(
-                        "Jack Beasley",
-                        style: TextStyle(
+                        context.watch<MemberProvider>().name,
+                        style: const TextStyle(
                             fontSize: 42, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "Age:83                Main/02",
-                        style: TextStyle(
+                        "Age:${context.watch<MemberProvider>().age}                Main/02",
+                        style: const TextStyle(
                           fontSize: 20,
                         ),
                       ),
                       Text(
-                        "Male",
-                        style: TextStyle(fontSize: 20),
+                        context.watch<MemberProvider>().sex,
+                        style: const TextStyle(fontSize: 20),
                       )
                     ])),
             Container(
@@ -57,44 +59,44 @@ class UserBoard extends StatelessWidget {
                 child: const VerticalDivider(color: Colors.grey, thickness: 1)),
             Container(
                 padding: const EdgeInsets.all(0),
-                child: const Column(
+                child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.people,
                         size: 50,
                         color: Color.fromARGB(255, 29, 65, 133),
                       ),
-                      Text(
+                      const Text(
                         "height",
                         style: TextStyle(fontSize: 15),
                       ),
                       Text(
-                        "178 cm",
-                        style: TextStyle(fontSize: 30),
+                        "${context.watch<MemberProvider>().height} cm",
+                        style: const TextStyle(fontSize: 30),
                       )
                     ])),
             Container(
                 padding: EdgeInsets.only(
                     left: MediaQuery.of(context).size.width * 0.05,
                     right: MediaQuery.of(context).size.width * 0.02),
-                child: const Column(
+                child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.people,
                         size: 50,
                         color: Color.fromARGB(255, 29, 65, 133),
                       ),
-                      Text(
+                      const Text(
                         "Weight",
                         style: TextStyle(fontSize: 15),
                       ),
                       Text(
-                        "158 lb",
-                        style: TextStyle(fontSize: 30),
+                        "${context.watch<MemberProvider>().weight} kg",
+                        style: const TextStyle(fontSize: 30),
                       )
                     ]))
           ])

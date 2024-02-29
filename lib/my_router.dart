@@ -4,6 +4,8 @@ import 'package:flutter_example/app_member.dart';
 import 'package:flutter_example/pages/firebase/firebase_login/firebase_login_page.dart';
 import 'package:flutter_example/pages/local_storage/local_storage.dart';
 import 'package:flutter_example/pages/widget_example/indx.dart';
+import 'package:flutter_example/provider/member_provider.dart';
+import 'package:provider/provider.dart';
 
 class RouteName {
   static const String index = '/';
@@ -19,7 +21,13 @@ class MyRouter {
       case RouteName.index:
         return NoAnimRouteBuilder(const IndexApp(), RouteName.index);
       case RouteName.member:
-        return NoAnimRouteBuilder(const MemberApp(), RouteName.member);
+        return NoAnimRouteBuilder(
+            MultiProvider(providers: [
+              ChangeNotifierProvider<MemberProvider>(
+                create: (context) => MemberProvider(),
+              ),
+            ], child: const MemberApp()),
+            RouteName.member);
       case RouteName.firebase:
         return NoAnimRouteBuilder(
             const FirebaseLoginPage(), RouteName.firebase);

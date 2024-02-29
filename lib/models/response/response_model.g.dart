@@ -13,10 +13,9 @@ ResponseModel _$ResponseModelFromJson(Map<String, dynamic> json) =>
       data: json['data'] == null
           ? null
           : UserModel.fromJson(json['data'] as Map<String, dynamic>),
-      bpmData: json['bpmData'] == null
-          ? null
-          : List<BloodPressureModel>.from(json['bpmData']
-              .map((model) => BloodPressureModel.fromJson(model))),
+      bpmData: (json['bpmData'] as List<dynamic>?)
+          ?.map((e) => BloodPressureModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$ResponseModelToJson(ResponseModel instance) =>

@@ -24,8 +24,7 @@ class CustomLocalizationsDelegate
 
 class CustomLocalizations {
   final Locale locale;
-  CustomLocalizations(
-      {this.locale = const Locale.fromSubtags(languageCode: 'zh')});
+  CustomLocalizations({this.locale = const Locale("zh", "TW")});
 
   late Map<dynamic, dynamic> _localizedValues;
 

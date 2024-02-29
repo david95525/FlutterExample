@@ -10,7 +10,7 @@ BodyTemperatureModel _$BodyTemperatureModelFromJson(
         Map<String, dynamic> json) =>
     BodyTemperatureModel(
       btId: json['btId'] as int,
-      bodytemp: json['bodytemp'] as double?,
+      bodytemp: (json['bodytemp'] as num?)?.toDouble(),
       updateDate: json['updateDate'] as String?,
       note: json['note'] as String?,
     );
