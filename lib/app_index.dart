@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/my_router.dart';
+import 'package:flutter_example/pages/bluetooth/bluetooth_page.dart';
+import 'package:flutter_example/pages/local_storage/local_storage.dart';
 import 'package:flutter_example/pages/login/login_page.dart';
 import 'pages/home/home_page.dart';
 
@@ -13,7 +15,12 @@ class IndexApp extends StatefulWidget {
 class _IndexAppState extends State<IndexApp> {
   int _selectedIndex = 0;
   CustomLocalizations localizations = CustomLocalizations();
-  final _bodyList = const [HomePage(), LoginPage()];
+  final _bodyList = const [
+    HomePage(),
+    LoginPage(),
+    LocalStorageApp(),
+    BluetoothPage()
+  ];
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -28,6 +35,8 @@ class _IndexAppState extends State<IndexApp> {
       BottomNavigationBarItem(
           icon: const Icon(Icons.storage),
           label: CustomLocalizations.of(context)?.text("Localstorage")),
+      const BottomNavigationBarItem(
+          icon: Icon(Icons.bluetooth), label: "Bluetooth"),
     ];
 
     return DefaultTabController(
