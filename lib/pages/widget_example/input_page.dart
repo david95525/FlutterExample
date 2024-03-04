@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class InputPage extends StatefulWidget {
-  const InputPage({Key? key}) : super(key: key);
+  const InputPage({super.key});
   @override
   State<InputPage> createState() => _InputPageState();
 }
@@ -55,7 +55,7 @@ class _InputPageState extends State<InputPage> {
               labelText: "birthday",
               hintText: "birthday",
               prefixIcon: Icon(Icons.person)),
-          onTap: () => _DateInput(),
+          onTap: () => _dateInput(),
         ),
         Switch(
           value: _switchSelected,
@@ -130,7 +130,7 @@ class _InputPageState extends State<InputPage> {
     debugPrint(_inputfieldController.text);
   }
 
-  void _DateInput() async {
+  void _dateInput() async {
     DateTime? result = await _showDatePicker();
     if (result != null) {
       String formattedDate = result.toIso8601String();

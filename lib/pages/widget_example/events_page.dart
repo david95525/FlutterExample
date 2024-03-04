@@ -15,7 +15,7 @@ class _EventsPageState extends State<EventsPage> {
   double _left = 0.0;
   double _height = 200.0;
   double _weight = 100.0;
-  TapGestureRecognizer _tapGestureRecognizer = TapGestureRecognizer();
+  final TapGestureRecognizer _tapGestureRecognizer = TapGestureRecognizer();
   bool _toggle = false;
 
   @override
@@ -26,7 +26,6 @@ class _EventsPageState extends State<EventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    String absorbPointer = "";
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -67,10 +66,9 @@ class _EventsPageState extends State<EventsPage> {
                     width: 100.0,
                     height: 200.0,
                   ),
-                  onPointerDown: (event) => {absorbPointer = "none"},
                 ),
               ),
-              onPointerDown: (event) => print("up"),
+              onPointerDown: (event) => debugPrint("up"),
             ),
             GestureDetector(
               child: Container(

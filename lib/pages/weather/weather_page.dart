@@ -5,7 +5,7 @@ import 'package:flutter_example/models/weather/weather_model.dart';
 import 'package:http/http.dart' as http;
 
 class WeatherPage extends StatefulWidget {
-  const WeatherPage({Key? key}) : super(key: key);
+  const WeatherPage({super.key});
 
   @override
   State<WeatherPage> createState() => _WeatherPageState();

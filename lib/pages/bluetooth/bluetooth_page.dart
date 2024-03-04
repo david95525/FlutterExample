@@ -13,7 +13,8 @@ class _BluetoothPageState extends State<BluetoothPage> {
   StreamSubscription<DiscoveredDevice>? _streamSubscription;
   StreamSubscription<ConnectionStateUpdate>? _connectionStreamSubscription;
   List<DiscoveredDevice> deviceList = [];
-  List<String> idList = [];
+  List<String> buttonTextList = [];
+  List<String> nameList = [];
   final flutterReactiveBle = FlutterReactiveBle();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   String deviceid = "";
@@ -45,16 +46,6 @@ class _BluetoothPageState extends State<BluetoothPage> {
                 onPressed: () => _scanDevice(),
                 child: const Text('scan'),
               ),
-              ElevatedButton(
-                key: const Key('show'),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                onPressed: () => {_showDevice()},
-                child: const Text('show'),
-              ),
               Expanded(
                 child: ListView.builder(
                   itemCount: deviceList.length,
@@ -63,6 +54,20 @@ class _BluetoothPageState extends State<BluetoothPage> {
                     return ListTile(
                       title: Text(item.id),
                       subtitle: Text(item.name),
+                      trailing: ElevatedButton(
+                        key: const Key('connect'),
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            backgroundColor: buttonTextList[index] == "Connect"
+                                ? Colors.white70
+                                : Colors.lightGreen),
+                        onPressed: () => buttonTextList[index] == "Connect"
+                            ? _connectDevice(index)
+                            : _disconnectDevice(index),
+                        child: Text(buttonTextList[index]),
+                      ),
                     );
                   },
                 ),
@@ -75,41 +80,78 @@ class _BluetoothPageState extends State<BluetoothPage> {
   void _scanDevice() {
     _streamSubscription = flutterReactiveBle.scanForDevices(
         withServices: [], scanMode: ScanMode.lowLatency).listen((device) {
-      if (device.id == "C8:58:C0:5F:A7:61") {
-        idList.add(device.id);
+      if (device.name.isNotEmpty && !nameList.contains(device.name)) {
+        buttonTextList.add("Connect");
+        nameList.add(device.name);
         setState(() {
           deviceList.add(device);
         });
+      }
+      if (deviceList.length >= 5) {
         _streamSubscription?.cancel();
       }
     }, onError: (e) {
       debugPrint("onError = $e");
     });
-
-    // if (deviceList.isNotEmpty) {
-    //   DiscoveredDevice device = deviceList[0];
-    //   _connectionStreamSubscription = flutterReactiveBle
-    //       .connectToDevice(
-    //     id: device.id,
-    //     servicesWithCharacteristicsToDiscover: {},
-    //     connectionTimeout: const Duration(seconds: 3),
-    //   )
-    //       .listen((connectionState) {
-    //     if (connectionState.connectionState ==
-    //         DeviceConnectionState.connected) {
-    //       debugPrint(" connectionState=${connectionState.deviceId}");
-    //     }
-    //   }, onError: (Object error) {
-    //     debugPrint("error1 =$error");
-    //   });
-    //   _connectionStreamSubscription?.cancel();
-    // }
   }
 
-  void _showDevice() {
-    debugPrint(deviceList.length.toString());
-    for (int i = 0; i < deviceList.length; i++) {
-      debugPrint(deviceList[i].id);
-    }
+  void _connectDevice(int index) {
+    debugPrint(index.toString());
+    DiscoveredDevice device = deviceList[index];
+    _connectionStreamSubscription = flutterReactiveBle
+        .connectToDevice(
+      id: device.id,
+      servicesWithCharacteristicsToDiscover: {},
+      connectionTimeout: const Duration(seconds: 3),
+    )
+        .listen((connectionState) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      if (connectionState.connectionState == DeviceConnectionState.connecting) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [CircularProgressIndicator(), Text("Connecting...")],
+          ),
+          backgroundColor: Colors.grey,
+        ));
+      }
+      if (connectionState.connectionState == DeviceConnectionState.connected) {
+        setState(() {
+          buttonTextList[index] = "Disconnect";
+        });
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [CircularProgressIndicator(), Text("Connect Success")],
+          ),
+          backgroundColor: Colors.green,
+        ));
+        Timer(const Duration(seconds: 1), () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        });
+      }
+      if (connectionState.connectionState ==
+          DeviceConnectionState.disconnected) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [CircularProgressIndicator(), Text("Connect Fail")],
+          ),
+          backgroundColor: Colors.grey,
+        ));
+        Timer(const Duration(seconds: 1), () {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        });
+      }
+    }, onError: (Object error) {
+      debugPrint("error1 =$error");
+    });
+  }
+
+  void _disconnectDevice(int index) {
+    setState(() {
+      buttonTextList[index] = "Connect";
+    });
+    _connectionStreamSubscription?.cancel();
   }
 }

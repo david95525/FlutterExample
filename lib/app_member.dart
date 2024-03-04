@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example/models/member/member_model.dart';
-import 'package:flutter_example/models/response/response_model.dart';
 import 'package:flutter_example/my_router.dart';
 import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/pages/bodytemperature/bodytemperature_page.dart';
@@ -51,7 +50,7 @@ class _MemberAppState extends State<MemberApp> {
   ];
   @override
   Widget build(BuildContext context) {
-    Color? _backcolor = Colors.grey[100];
+    Color? backcolor = Colors.grey[100];
 
     MemberProvider userProvider = Provider.of(context);
     return DefaultTabController(
@@ -103,7 +102,7 @@ class _MemberAppState extends State<MemberApp> {
                       alignment: Alignment.center,
                       child: Text(
                         "Company",
-                        style: TextStyle(fontSize: 40, color: _backcolor),
+                        style: TextStyle(fontSize: 40, color: backcolor),
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         softWrap: true,
@@ -116,7 +115,7 @@ class _MemberAppState extends State<MemberApp> {
                             alignment: Alignment.center,
                             child: Icon(Icons.calculate,
                                 size: MediaQuery.of(context).size.height / 10,
-                                color: _backcolor)),
+                                color: backcolor)),
                         selectedIcon: Container(
                             height: MediaQuery.of(context).size.height / 7,
                             alignment: Alignment.center,
@@ -124,7 +123,7 @@ class _MemberAppState extends State<MemberApp> {
                                 borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(100),
                                     bottomLeft: Radius.circular(100)),
-                                color: _backcolor),
+                                color: backcolor),
                             child: Icon(Icons.calculate,
                                 size: MediaQuery.of(context).size.height / 10,
                                 color: const Color.fromARGB(255, 18, 20, 22))),
@@ -136,7 +135,7 @@ class _MemberAppState extends State<MemberApp> {
                             alignment: Alignment.center,
                             child: Icon(Icons.bloodtype_sharp,
                                 size: MediaQuery.of(context).size.height / 10,
-                                color: _backcolor)),
+                                color: backcolor)),
                         selectedIcon: Container(
                             height: MediaQuery.of(context).size.height / 7,
                             alignment: Alignment.center,
@@ -144,7 +143,7 @@ class _MemberAppState extends State<MemberApp> {
                                 borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(100),
                                     bottomLeft: Radius.circular(100)),
-                                color: _backcolor),
+                                color: backcolor),
                             child: Icon(Icons.bloodtype_sharp,
                                 size: MediaQuery.of(context).size.height / 10,
                                 color: const Color.fromARGB(255, 29, 65, 133))),
@@ -156,7 +155,7 @@ class _MemberAppState extends State<MemberApp> {
                             alignment: Alignment.center,
                             child: Icon(Icons.thermostat,
                                 size: MediaQuery.of(context).size.height / 10,
-                                color: _backcolor)),
+                                color: backcolor)),
                         selectedIcon: Container(
                             height: MediaQuery.of(context).size.height / 7,
                             alignment: Alignment.center,
@@ -164,7 +163,7 @@ class _MemberAppState extends State<MemberApp> {
                                 borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(100),
                                     bottomLeft: Radius.circular(100)),
-                                color: _backcolor),
+                                color: backcolor),
                             child: Icon(Icons.thermostat,
                                 size: MediaQuery.of(context).size.height / 10,
                                 color: const Color.fromARGB(255, 29, 65, 133))),

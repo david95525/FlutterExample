@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example/models/member/member_model.dart';
-import 'package:flutter_example/models/user/user_model.dart';
 import 'package:flutter_example/pages/dashboard/boards/bloodglucose_board.dart';
 import 'package:flutter_example/pages/dashboard/boards/bloodpressure_board.dart';
 import 'package:flutter_example/pages/dashboard/boards/bodytemperature_board.dart';

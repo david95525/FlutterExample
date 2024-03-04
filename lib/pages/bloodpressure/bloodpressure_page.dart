@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_example/models/bloodpressure/bloodpressure_model.dart';
 
 class BloodPressurePage extends StatefulWidget {
-  const BloodPressurePage({Key? key}) : super(key: key);
+  const BloodPressurePage({super.key});
 
   @override
   State<BloodPressurePage> createState() => _BloodPressurePageState();

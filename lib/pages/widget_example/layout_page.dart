@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LayoutPage extends StatefulWidget {
-  const LayoutPage({Key? key}) : super(key: key);
+  const LayoutPage({super.key});
   @override
   State<LayoutPage> createState() => _LayoutPageState();
 }

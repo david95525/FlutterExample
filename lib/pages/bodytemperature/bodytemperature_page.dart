@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 class BodyTemperaturePage extends StatefulWidget {
-  const BodyTemperaturePage({Key? key}) : super(key: key);
+  const BodyTemperaturePage({super.key});
 
   @override
   State<BodyTemperaturePage> createState() => _BodyTemperaturePageState();
