@@ -196,7 +196,7 @@ class _MemberAppState extends State<MemberApp> {
               ),
               SimpleDialogOption(
                 onPressed: () {
-                  localizations.setLocale(context, const Locale("zh", "TW"));
+                  localizations.setLocale(context, const Locale("zh"));
                   Navigator.pop(context, 2);
                 },
                 child: Padding(

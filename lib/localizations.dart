@@ -24,13 +24,13 @@ class CustomLocalizationsDelegate
 
 class CustomLocalizations {
   final Locale locale;
-  CustomLocalizations({this.locale = const Locale("zh", "TW")});
+  CustomLocalizations({this.locale = const Locale("zh")});
 
   late Map<dynamic, dynamic> _localizedValues;
 
   Future<bool> loadJson() async {
-    String jsonContent = await rootBundle
-        .loadString("locale/${locale.languageCode}_${locale.countryCode}.json");
+    String jsonContent =
+        await rootBundle.loadString("locale/${locale.languageCode}.json");
     Map<String, dynamic> jsonMap = json.decode(jsonContent);
     _localizedValues = jsonMap.map((key, value) {
       return MapEntry(key, value.toString());

@@ -93,8 +93,7 @@ class _IndexAppState extends State<IndexApp> {
                             "Chinese(Taiwan)"),
                     onTap: () {
                       Navigator.pop(context);
-                      localizations.setLocale(
-                          context, const Locale("zh", "TW"));
+                      localizations.setLocale(context, const Locale("zh"));
                     },
                   )
                 ],

@@ -35,7 +35,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale = const Locale("zh", "TW");
+  Locale _locale = const Locale("zh");
   void changeLocale(Locale locale) {
     setState(() {
       _locale = locale;
@@ -64,10 +64,11 @@ class _MyAppState extends State<MyApp> {
                 CustomLocalizationsDelegate(),
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
               ],
               supportedLocales: const [
                 Locale('en', 'US'),
-                Locale('zh', 'TW'),
+                Locale('zh'),
               ],
               locale: _locale,
             )));
