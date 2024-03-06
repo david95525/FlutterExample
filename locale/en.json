@@ -1,13 +1,17 @@
 {
-    "en_us":"English(US)",
-    "zh_tw":"Chinese(Taiwan)",
-    "home_title": "home page",
-    "Home":"Home",
-    "Weather":"Weather",
+    "EnUS": "English(US)",
+    "ZhTW": "Chinese(Taiwan)",
+    "HomeTitle": "home page",
+    "Home": "Home",
+    "Weather": "Weather",
     "Login": "Login",
-    "Localstorage":"Localstorage",
-    "language":"language",
-    "averagetemp":"Average Temperature",
-    "welcome_to": "Welcome to",
-    "sign_up": "SIGN UP"
+    "Localstorage": "Localstorage",
+    "Language": "language",
+    "Averagetemp": "Average Temperature",
+    "Age": "Age",
+    "Height": "Height",
+    "Weight": "Weight",
+    "Pulse": "Pulse",
+    "BloodPressure": "Blood Pressure",
+    "BodyTemperature": "Body Temperature"
 }

@@ -3,6 +3,7 @@ import 'package:flutter_example/models/member/member_model.dart';
 import 'package:flutter_example/my_router.dart';
 import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/pages/bodytemperature/bodytemperature_page.dart';
+import 'package:flutter_example/pages/home/home_page.dart';
 import 'package:flutter_example/provider/member_provider.dart';
 import 'package:provider/provider.dart';
 import 'pages/dashboard/dashboard_page.dart';
@@ -19,8 +20,10 @@ class MemberApp extends StatefulWidget {
 
 class _MemberAppState extends State<MemberApp> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController =
+      TextEditingController(text: "test@test.com");
+  final TextEditingController _passwordController =
+      TextEditingController(text: "test01");
   late MemberModel apidata;
   CustomLocalizations localizations = CustomLocalizations();
 
@@ -47,6 +50,7 @@ class _MemberAppState extends State<MemberApp> {
     const DashboardPage(),
     const BloodPressurePage(),
     const BodyTemperaturePage(),
+    const HomePage()
   ];
   @override
   Widget build(BuildContext context) {
@@ -147,7 +151,7 @@ class _MemberAppState extends State<MemberApp> {
                             child: Icon(Icons.bloodtype_sharp,
                                 size: MediaQuery.of(context).size.height / 10,
                                 color: const Color.fromARGB(255, 29, 65, 133))),
-                        label: const Text('BloodPressure'),
+                        label: const Text("BloodPressure"),
                       ),
                       NavigationRailDestination(
                         icon: Container(
@@ -167,7 +171,27 @@ class _MemberAppState extends State<MemberApp> {
                             child: Icon(Icons.thermostat,
                                 size: MediaQuery.of(context).size.height / 10,
                                 color: const Color.fromARGB(255, 29, 65, 133))),
-                        label: const Text('BodyTemperature'),
+                        label: const Text("BodyTemperature"),
+                      ),
+                      NavigationRailDestination(
+                        icon: Container(
+                            height: MediaQuery.of(context).size.height / 7,
+                            alignment: Alignment.center,
+                            child: Icon(Icons.home,
+                                size: MediaQuery.of(context).size.height / 10,
+                                color: backcolor)),
+                        selectedIcon: Container(
+                            height: MediaQuery.of(context).size.height / 7,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(100),
+                                    bottomLeft: Radius.circular(100)),
+                                color: backcolor),
+                            child: Icon(Icons.home,
+                                size: MediaQuery.of(context).size.height / 10,
+                                color: const Color.fromARGB(255, 29, 65, 133))),
+                        label: const Text("Home"),
                       ),
                     ],
                   ),
@@ -180,7 +204,7 @@ class _MemberAppState extends State<MemberApp> {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text(CustomLocalizations.of(context)?.text("language") ??
+            title: Text(CustomLocalizations.of(context)?.text("Language") ??
                 "language"),
             children: <Widget>[
               SimpleDialogOption(
@@ -190,7 +214,7 @@ class _MemberAppState extends State<MemberApp> {
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Text(CustomLocalizations.of(context)?.text("en_us") ??
+                  child: Text(CustomLocalizations.of(context)?.text("EnUS") ??
                       "English"),
                 ),
               ),
@@ -201,7 +225,7 @@ class _MemberAppState extends State<MemberApp> {
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6),
-                  child: Text(CustomLocalizations.of(context)?.text("zh_tw") ??
+                  child: Text(CustomLocalizations.of(context)?.text("ZhTW") ??
                       "Chinese(Taiwan)"),
                 ),
               ),
@@ -221,12 +245,17 @@ class _MemberAppState extends State<MemberApp> {
               TextField(
                 controller: _emailController,
                 decoration: const InputDecoration(
-                    icon: Icon(Icons.email), labelText: 'Email'),
+                    hintText: 'test@test.com/test02@test.com',
+                    icon: Icon(Icons.email),
+                    labelText: 'Email'),
               ),
               TextField(
+                  obscureText: true,
                   controller: _passwordController,
                   decoration: const InputDecoration(
-                      icon: Icon(Icons.lock), labelText: 'Password'))
+                      icon: Icon(Icons.lock),
+                      labelText: 'Password',
+                      hintText: 'test01/test02'))
             ]),
             actions: <Widget>[
               MaterialButton(

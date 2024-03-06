@@ -78,7 +78,7 @@ class _IndexAppState extends State<IndexApp> {
                   ListTile(
                     leading: const Icon(Icons.language),
                     title: Text(
-                        CustomLocalizations.of(context)?.text("en_us") ??
+                        CustomLocalizations.of(context)?.text("EnUS") ??
                             "English"),
                     onTap: () {
                       Navigator.pop(context);
@@ -89,7 +89,7 @@ class _IndexAppState extends State<IndexApp> {
                   ListTile(
                     leading: const Icon(Icons.language),
                     title: Text(
-                        CustomLocalizations.of(context)?.text("zh_tw") ??
+                        CustomLocalizations.of(context)?.text("ZhTW") ??
                             "Chinese(Taiwan)"),
                     onTap: () {
                       Navigator.pop(context);

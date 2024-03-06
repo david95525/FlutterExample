@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_example/widgets/custom_board.dart';
 
-class BloodglucoseBoard extends StatelessWidget {
-  const BloodglucoseBoard({super.key});
+class BloodglucoseBoard extends StatefulWidget {
+  const BloodglucoseBoard({super.key, required this.glucoseController});
+  final TextEditingController glucoseController;
+  @override
+  State<BloodglucoseBoard> createState() => _BloodglucoseBoardState();
+}
 
+class _BloodglucoseBoardState extends State<BloodglucoseBoard> {
   @override
   Widget build(BuildContext context) {
     return CustomBoard(
@@ -15,9 +21,10 @@ class BloodglucoseBoard extends StatelessWidget {
             top: MediaQuery.of(context).size.height * 0.02),
         color: Colors.white,
         children: [
-          Wrap(children: [
+          Wrap(crossAxisAlignment: WrapCrossAlignment.start, children: [
             Container(
-                padding: const EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.01),
                 child: const Icon(
                   Icons.bloodtype,
                   size: 50,
@@ -29,13 +36,38 @@ class BloodglucoseBoard extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             )
           ]),
-          Wrap(children: [
+          Wrap(crossAxisAlignment: WrapCrossAlignment.start, children: [
             Container(
-                padding: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.2),
+                width: 80,
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.14),
+                child: TextField(
+                  controller: widget.glucoseController,
+                  inputFormatters: [LengthLimitingTextInputFormatter(3)],
+                  textAlign: TextAlign.right,
+                  style: const TextStyle(
+                      fontSize: 45,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 29, 65, 133)),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                  ),
+                )),
+            Container(
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.02,
+                    top: MediaQuery.of(context).size.height * 0.08),
                 child: const Text(
                   "mg/dL",
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
                 ))
           ])
         ]);

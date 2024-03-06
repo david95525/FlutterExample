@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/widgets/custom_board.dart';
 
-class BodyTemperatureBoard extends StatelessWidget {
-  const BodyTemperatureBoard({super.key});
+class BodyTemperatureBoard extends StatefulWidget {
+  const BodyTemperatureBoard({super.key, required this.bodytempController});
+  final TextEditingController bodytempController;
 
+  @override
+  State<BodyTemperatureBoard> createState() => _BodyTemperatureBoardState();
+}
+
+class _BodyTemperatureBoardState extends State<BodyTemperatureBoard> {
   @override
   Widget build(BuildContext context) {
     return CustomBoard(
@@ -24,19 +32,44 @@ class BodyTemperatureBoard extends StatelessWidget {
                 )),
             Container(
               padding: const EdgeInsets.only(left: 10, top: 10),
-              child: const Text("Body Temperature",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              child: Text(
+                  CustomLocalizations.of(context)?.text("BodyTemperature") ??
+                      "Body Temperature",
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold)),
             )
           ]),
           Wrap(children: [
             Container(
-                alignment: Alignment.bottomRight,
-                padding: EdgeInsets.only(
-                    right: 10, top: MediaQuery.of(context).size.height * 0.05),
-                child: const Text(
-                  "97 °F",
-                  style: TextStyle(fontSize: 30),
-                ))
+                width: 75,
+                margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.2,
+                ),
+                child: TextField(
+                  controller: widget.bodytempController,
+                  inputFormatters: [LengthLimitingTextInputFormatter(3)],
+                  style: const TextStyle(
+                      fontSize: 42,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 29, 65, 133)),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                  ),
+                )),
+            Container(
+                margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.08,
+                    left: MediaQuery.of(context).size.width * 0.02),
+                child: const Text("°F",
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    )))
           ]),
         ]);
   }

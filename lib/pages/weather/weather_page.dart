@@ -43,7 +43,7 @@ class _WeatherPageState extends State<WeatherPage> {
                 style: const TextStyle(fontSize: 15),
               ),
               Text(
-                "${CustomLocalizations.of(context)?.text("averagetemp")}:${weather?.temperature}",
+                "${CustomLocalizations.of(context)?.text("Averagetemp")}:${weather?.temperature}",
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 15),
               )

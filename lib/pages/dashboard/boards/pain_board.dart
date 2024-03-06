@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example/widgets/custom_board.dart';
 
-class PainBoard extends StatelessWidget {
-  const PainBoard({super.key});
+class PainBoard extends StatefulWidget {
+  const PainBoard({super.key, required this.changePain,required this.painlevel});
+  final Function changePain;
+  final int painlevel;
+  @override
+  State<PainBoard> createState() => _PainBoardState();
+}
+
+class _PainBoardState extends State<PainBoard> {
   @override
   Widget build(BuildContext context) {
     List<int> numberList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -31,10 +38,11 @@ class PainBoard extends StatelessWidget {
                       )),
                   for (int i = 1; i <= numberList.length; i++) ...[
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () => widget.changePain(i),
                         style: TextButton.styleFrom(
-                            backgroundColor:
-                                i == 7 ? Colors.red : Colors.grey[200],
+                            backgroundColor: i == widget.painlevel
+                                ? Colors.red
+                                : Colors.grey[200],
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero,
                             )),

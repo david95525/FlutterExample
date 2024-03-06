@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/provider/member_provider.dart';
 import 'package:flutter_example/widgets/custom_board.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,7 @@ class UserBoard extends StatelessWidget {
                             fontSize: 42, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "Age:${context.watch<MemberProvider>().age}                Main/02",
+                        "${CustomLocalizations.of(context)?.text("Age") ?? "Age"}:${context.watch<MemberProvider>().age}                Main/02",
                         style: const TextStyle(
                           fontSize: 20,
                         ),
@@ -68,9 +69,10 @@ class UserBoard extends StatelessWidget {
                         size: 50,
                         color: Color.fromARGB(255, 29, 65, 133),
                       ),
-                      const Text(
-                        "height",
-                        style: TextStyle(fontSize: 15),
+                      Text(
+                        CustomLocalizations.of(context)?.text("Height") ??
+                            "Height",
+                        style: const TextStyle(fontSize: 15),
                       ),
                       Text(
                         "${context.watch<MemberProvider>().height} cm",
@@ -90,9 +92,10 @@ class UserBoard extends StatelessWidget {
                         size: 50,
                         color: Color.fromARGB(255, 29, 65, 133),
                       ),
-                      const Text(
-                        "Weight",
-                        style: TextStyle(fontSize: 15),
+                      Text(
+                        CustomLocalizations.of(context)?.text("Weight") ??
+                            "Weight",
+                        style: const TextStyle(fontSize: 15),
                       ),
                       Text(
                         "${context.watch<MemberProvider>().weight} kg",
