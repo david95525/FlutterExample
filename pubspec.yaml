@@ -57,6 +57,7 @@ dependencies:
   meta: ^1.11.0
   firebase_core: ^2.25.4
   provider: ^6.1.2
+  url_launcher: ^6.2.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

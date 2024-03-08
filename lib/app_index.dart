@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/my_router.dart';
@@ -5,6 +7,8 @@ import 'package:flutter_example/pages/bluetooth/bluetooth_page.dart';
 import 'package:flutter_example/pages/local_storage/local_storage.dart';
 import 'package:flutter_example/pages/login/login_page.dart';
 import 'pages/home/home_page.dart';
+import 'dart:html' as html;
+import 'package:http/http.dart' as http;
 
 class IndexApp extends StatefulWidget {
   const IndexApp({super.key});
@@ -13,6 +17,8 @@ class IndexApp extends StatefulWidget {
 }
 
 class _IndexAppState extends State<IndexApp> {
+  String clientSecret = const String.fromEnvironment('client_secret');
+  String clientId = const String.fromEnvironment('client_id');
   int _selectedIndex = 0;
   CustomLocalizations localizations = CustomLocalizations();
   final _bodyList = const [
@@ -60,6 +66,7 @@ class _IndexAppState extends State<IndexApp> {
                         Navigator.pushNamed(context, RouteName.widgets),
                     icon: const Icon(Icons.now_widgets_outlined),
                     selectedIcon: const Icon(Icons.now_widgets)),
+                TextButton(onPressed: () => _get(), child: const Text('Get')),
                 TextButton(
                     onPressed: () =>
                         Navigator.pushNamed(context, RouteName.firebase),
@@ -77,9 +84,8 @@ class _IndexAppState extends State<IndexApp> {
                       )),
                   ListTile(
                     leading: const Icon(Icons.language),
-                    title: Text(
-                        CustomLocalizations.of(context)?.text("EnUS") ??
-                            "English"),
+                    title: Text(CustomLocalizations.of(context)?.text("EnUS") ??
+                        "English"),
                     onTap: () {
                       Navigator.pop(context);
                       localizations.setLocale(
@@ -88,9 +94,8 @@ class _IndexAppState extends State<IndexApp> {
                   ),
                   ListTile(
                     leading: const Icon(Icons.language),
-                    title: Text(
-                        CustomLocalizations.of(context)?.text("ZhTW") ??
-                            "Chinese(Taiwan)"),
+                    title: Text(CustomLocalizations.of(context)?.text("ZhTW") ??
+                        "Chinese(Taiwan)"),
                     onTap: () {
                       Navigator.pop(context);
                       localizations.setLocale(context, const Locale("zh"));
@@ -113,5 +118,25 @@ class _IndexAppState extends State<IndexApp> {
     } else {
       setState(() => _selectedIndex = index);
     }
+  }
+
+  void _get() async {
+    final currentUri = html.window.location.href;
+    final uri = Uri.parse(currentUri);
+    final String? code = uri.queryParameters['code'];
+    debugPrint('code: $code');
+    Map<String, dynamic> data = {
+      'code': code,
+      'client_id': clientId,
+      'client_secret': clientSecret,
+      'redirect_uri': 'https://flutterexample.azurewebsites.net',
+      'grant_type': 'authorization_code'
+    };
+    var client = http.Client();
+    var response = await client.post(
+        Uri.https('accountdev.microlifecloud.com', '/OAuth2/Token'),
+        headers: {"Authorization": "application/json"},
+        body: jsonEncode(data));
+    if (response.statusCode == 200) {}
   }
 }

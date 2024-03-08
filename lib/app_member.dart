@@ -6,11 +6,14 @@ import 'package:flutter_example/pages/bodytemperature/bodytemperature_page.dart'
 import 'package:flutter_example/pages/home/home_page.dart';
 import 'package:flutter_example/provider/member_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'pages/dashboard/dashboard_page.dart';
 import 'pages/bloodpressure/bloodpressure_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_example/models/login/login_model.dart';
 import 'dart:convert';
+
+const String clientId = String.fromEnvironment('client_id');
 
 class MemberApp extends StatefulWidget {
   const MemberApp({super.key});
@@ -72,13 +75,22 @@ class _MemberAppState extends State<MemberApp> {
                   onPressed: () =>
                       Navigator.pushNamed(context, RouteName.index),
                 ),
+                TextButton(
+                  child: const Text("login"),
+                  onPressed: () async {
+                    await _displayTextInputDialog(context, userProvider);
+                  },
+                ),
                 IconButton(
                   icon: const Icon(
                     Icons.login,
                     color: Colors.white,
                   ),
                   onPressed: () async {
-                    await _displayTextInputDialog(context, userProvider);
+                    await launchUrlString(
+                        "https://accountdev.microlifecloud.com/OAuth2/Authorize?"
+                        "redirect_uri=https://flutterexample.azurewebsites.net&state=flutter&lang=EN&response_type=code"
+                        "&client_id=$clientId");
                   },
                 ),
                 IconButton(
