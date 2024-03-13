@@ -6,9 +6,8 @@ import 'package:flutter_example/my_router.dart';
 import 'package:flutter_example/pages/bluetooth/bluetooth_page.dart';
 import 'package:flutter_example/pages/local_storage/local_storage.dart';
 import 'package:flutter_example/pages/login/login_page.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'pages/home/home_page.dart';
-import 'dart:html' as html;
-import 'package:http/http.dart' as http;
 
 class IndexApp extends StatefulWidget {
   const IndexApp({super.key});
@@ -20,6 +19,7 @@ class _IndexAppState extends State<IndexApp> {
   String clientSecret = const String.fromEnvironment('client_secret');
   String clientId = const String.fromEnvironment('client_id');
   int _selectedIndex = 0;
+  String code = "";
   CustomLocalizations localizations = CustomLocalizations();
   final _bodyList = const [
     HomePage(),
@@ -66,11 +66,18 @@ class _IndexAppState extends State<IndexApp> {
                         Navigator.pushNamed(context, RouteName.widgets),
                     icon: const Icon(Icons.now_widgets_outlined),
                     selectedIcon: const Icon(Icons.now_widgets)),
-                TextButton(onPressed: () => _get(), child: const Text('Get')),
                 TextButton(
                     onPressed: () =>
                         Navigator.pushNamed(context, RouteName.firebase),
                     child: const Text('Firebase')),
+                IconButton(
+                  icon: const Icon(
+                    Icons.login,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => _oauth2Login(),
+                ),
+                Text(code)
               ],
             ),
             drawer: Drawer(
@@ -120,23 +127,19 @@ class _IndexAppState extends State<IndexApp> {
     }
   }
 
-  void _get() async {
-    final currentUri = html.window.location.href;
-    final uri = Uri.parse(currentUri);
-    final String? code = uri.queryParameters['code'];
-    debugPrint('code: $code');
-    Map<String, dynamic> data = {
-      'code': code,
-      'client_id': clientId,
-      'client_secret': clientSecret,
-      'redirect_uri': 'https://flutterexample.azurewebsites.net',
-      'grant_type': 'authorization_code'
-    };
-    var client = http.Client();
-    var response = await client.post(
-        Uri.https('accountdev.microlifecloud.com', '/OAuth2/Token'),
-        headers: {"Authorization": "application/json"},
-        body: jsonEncode(data));
-    if (response.statusCode == 200) {}
+  void _oauth2Login() async {
+    String url =
+        Uri.https('flutterexample.azurewebsites.net', '/api/Account/GetCode', {
+      // 'response_type': 'code',
+      // 'client_id': clientId,
+      'redirect_uri': 'my.research.flutterproject.com://',
+      // 'state': 'flutter'
+    }).toString();
+    final result = await FlutterWebAuth.authenticate(
+        url: url, callbackUrlScheme: 'my.research.flutterproject.com');
+    String? result_code = Uri.parse(result).queryParameters['code'];
+    setState(() {
+      code = result_code ?? "";
+    });
   }
 }
