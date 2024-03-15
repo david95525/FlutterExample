@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_example/app_index.dart';
 import 'package:flutter_example/app_member.dart';
+import 'package:flutter_example/pages/Oauth2/oauth2_page.dart';
 import 'package:flutter_example/pages/firebase/firebase_login/firebase_login_page.dart';
 import 'package:flutter_example/pages/local_storage/local_storage.dart';
 import 'package:flutter_example/pages/widget_example/indx.dart';
@@ -13,6 +14,7 @@ class RouteName {
   static const String firebase = '/firebase';
   static const String localstorage = '/localstorage';
   static const String widgets = '/widgets';
+  static const String oauth2 = '/oauth2';
 }
 
 class MyRouter {
@@ -37,6 +39,8 @@ class MyRouter {
         return MaterialPageRoute(
             builder: (context) => const LocalStorageApp(),
             settings: const RouteSettings(name: RouteName.localstorage));
+      case RouteName.oauth2:
+        return NoAnimRouteBuilder(const Oauth2Page(), RouteName.oauth2);
       default:
         return NoAnimRouteBuilder(const IndexApp(), RouteName.index);
     }

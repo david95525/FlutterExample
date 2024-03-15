@@ -61,8 +61,12 @@ android {
         }
     }
     buildTypes {
-        release {
+        release {         
             signingConfig signingConfigs.release
+        }
+        debug{
+            applicationIdSuffix ".debug"
+            signingConfig signingConfigs.debug
         }
     }
 }
