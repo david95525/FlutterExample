@@ -1,16 +1,27 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:flutter/services.dart' show PlatformException;
+import 'package:oauth2_client/oauth2_helper.dart';
+import 'package:oauth2_client/oauth2_client.dart';
+import 'package:oauth2_client/access_token_response.dart';
 
+String clientSecret = const String.fromEnvironment('client_secret');
+String clientId = const String.fromEnvironment('client_id');
 bool _initialUriIsHandled = false;
+Uri devAuthuri =
+    Uri.https('accountdev.microlifecloud.com', '/OAuth2/Authorize', {
+  'client_id': clientId,
+  'response_type': 'code',
+  'redirect_uri': 'my-research-flutterproject-com://',
+  'state':'flutter'
+});
 
 class Oauth2Page extends StatefulWidget {
   const Oauth2Page({super.key});
@@ -21,10 +32,6 @@ class Oauth2Page extends StatefulWidget {
 class _Oauth2PageState extends State<Oauth2Page> {
   StreamSubscription? _sub;
   Object? _err;
-  String? _url;
-  //dev
-  String clientSecret = const String.fromEnvironment('client_secret');
-  String clientId = const String.fromEnvironment('client_id');
   //display
   String code = "";
   String token = "";
@@ -55,14 +62,6 @@ class _Oauth2PageState extends State<Oauth2Page> {
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               actions: [
                 TextButton(
-                  onPressed: () => _devLogin(),
-                  child: const Text('FlutterWebAuth'),
-                ),
-                TextButton(
-                  onPressed: () => _browserLogin(),
-                  child: const Text('urlLink'),
-                ),
-                TextButton(
                   onPressed: () => _gettoken(),
                   child: const Text('get_token'),
                 )
@@ -79,10 +78,32 @@ class _Oauth2PageState extends State<Oauth2Page> {
                       child: const Text('TestCookie')),
                 ],
               ),
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () => _browserLogin(),
+                    child: const Text('urlLink'),
+                  ),
+                  TextButton(
+                    onPressed: () => _devLogin(),
+                    child: const Text('FlutterWebAuth'),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  TextButton(
+                      onPressed: () => _oauth2clientWithoutHelper(),
+                      child: const Text('oauth2_WithoutHelper')),
+                  TextButton(
+                      onPressed: () => _oauth2clientWithHelper(),
+                      child: const Text('oauth2_WithHelper'))
+                ],
+              ),
               Text("code:$code"),
               Text("token:$token"),
               Text("save_token:$saveToken"),
-              Text("$_url"),
+              Text("$devAuthuri"),
               Text("$_err")
             ])));
   }
@@ -92,7 +113,7 @@ class _Oauth2PageState extends State<Oauth2Page> {
         Uri.https('flutterexample.azurewebsites.net', '/api/Account/GetCode', {
       'redirect_uri': 'my-research-flutterproject-com://',
     }).toString();
-    final result = await FlutterWebAuth.authenticate(
+    final result = await FlutterWebAuth2.authenticate(
         url: url, callbackUrlScheme: 'my-research-flutterproject-com');
     debugPrint(result);
     String? resultcode = Uri.parse(result).queryParameters['code'];
@@ -106,7 +127,7 @@ class _Oauth2PageState extends State<Oauth2Page> {
         'flutterexample.azurewebsites.net', '/api/Account/TestCookie', {
       'redirect_uri': 'my-research-flutterproject-com://',
     }).toString();
-    final result = await FlutterWebAuth.authenticate(
+    final result = await FlutterWebAuth2.authenticate(
         url: url, callbackUrlScheme: 'my-research-flutterproject-com');
   }
 
@@ -118,15 +139,8 @@ class _Oauth2PageState extends State<Oauth2Page> {
   }
 
   void _devLogin() async {
-    String url =
-        Uri.https('accountdev.microlifecloud.com', '/OAuth2/Authorize', {
-      'client_id': clientId,
-      'response_type': 'code',
-      'redirect_uri': 'my-research-flutterproject-com://',
-      'state': 'flutter'
-    }).toString();
-    debugPrint(url);
-    final result = await FlutterWebAuth.authenticate(
+    String url = devAuthuri.toString();
+    final result = await FlutterWebAuth2.authenticate(
         url: url, callbackUrlScheme: 'my-research-flutterproject-com');
     debugPrint(result);
     String? resultcode = Uri.parse(result).queryParameters['code'];
@@ -136,16 +150,43 @@ class _Oauth2PageState extends State<Oauth2Page> {
   }
 
   void _browserLogin() async {
-    Uri url = Uri.https('accountdev.microlifecloud.com', '/OAuth2/Authorize', {
-      'client_id': clientId,
-      'response_type': 'code',
-      'redirect_uri': 'my-research-flutterproject-com://',
-      'state': 'flutter'
-    });
+    await launchUrl(devAuthuri, mode: LaunchMode.platformDefault);
+  }
+
+  void _oauth2clientWithoutHelper() async {
+    var client = MyOAuth2Client(
+        redirectUri: 'my-research-flutterproject-com',
+        customUriScheme: 'my-research-flutterproject-com');
+    AccessTokenResponse tknResp = await client.getTokenWithAuthCodeFlow(
+        clientId: clientId, clientSecret: clientSecret, scopes: ['email'],state: 'flutter');
+    if (tknResp.isExpired()) {
+      tknResp = await client.refreshToken(tknResp.refreshToken ?? "",
+          clientId: clientId, clientSecret: clientSecret, scopes: ['email']);
+    }
+    final prefs = await SharedPreferences.getInstance();
+    debugPrint(tknResp.toString());
     setState(() {
-      _url = url.toString() ?? "";
+      token = tknResp.accessToken ?? "";
+      prefs.setString('access_token', token);
     });
-    await launchUrl(url, mode: LaunchMode.platformDefault);
+  }
+
+  void _oauth2clientWithHelper() async {
+    var client = MyOAuth2Client(
+        redirectUri: 'my-research-flutterproject-com',
+        customUriScheme: 'my-research-flutterproject-com');
+    OAuth2Helper oauth2Helper = OAuth2Helper(client,
+        grantType: OAuth2Helper.authorizationCode,
+        clientId: clientId,
+        clientSecret: clientSecret);
+    // http.Response resp =
+    //     oauth2Helper.get('https://www.googleapis.com/drive/v3/files');
+    AccessTokenResponse? tknResp = await oauth2Helper.getToken();
+    // final prefs = await SharedPreferences.getInstance();
+    // setState(() {
+    //   token = tknResp?.accessToken ?? "";
+    //   prefs.setString('access_token', token);
+    // });
   }
 
   void _gettoken() async {
@@ -212,4 +253,17 @@ class _Oauth2PageState extends State<Oauth2Page> {
       });
     }
   }
+}
+
+class MyOAuth2Client extends OAuth2Client {
+  MyOAuth2Client({required this.redirectUri, required this.customUriScheme})
+      : super(
+            authorizeUrl: devAuthuri.toString(),
+            tokenUrl:
+                Uri.https('accountdev.microlifecloud.com', '/OAuth2/Token')
+                    .toString(),
+            redirectUri: redirectUri,
+            customUriScheme: customUriScheme);
+  final String redirectUri;
+  final String customUriScheme;
 }
