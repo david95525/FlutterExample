@@ -16,11 +16,12 @@ String clientSecret = const String.fromEnvironment('client_secret');
 String clientId = const String.fromEnvironment('client_id');
 bool _initialUriIsHandled = false;
 Uri devAuthuri =
-    Uri.https('accountdev.microlifecloud.com', '/OAuth2/Authorize', {
+    Uri.https('accountdev.microlifecloud.com', '/AccountV2/NewLogin', {
   'client_id': clientId,
   'response_type': 'code',
-  'redirect_uri': 'my-research-flutterproject-com://',
-  'state':'flutter'
+  'redirect_uri': 'flutterwebauth-flutterproject-com://',
+  'lang': 'en',
+  'region': 'tw'
 });
 
 class Oauth2Page extends StatefulWidget {
@@ -62,8 +63,14 @@ class _Oauth2PageState extends State<Oauth2Page> {
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               actions: [
                 TextButton(
-                  onPressed: () => _gettoken(),
-                  child: const Text('get_token'),
+                  onPressed: () =>
+                      _gettoken('flutterwebauth-flutterproject-com://'),
+                  child: const Text('FlutterWebAuth_getToken'),
+                ),
+                TextButton(
+                  onPressed: () =>
+                      _gettoken('my-research-flutterproject-com://'),
+                  child: const Text('urllink_getToken'),
                 )
               ],
             ),
@@ -73,9 +80,6 @@ class _Oauth2PageState extends State<Oauth2Page> {
                   TextButton(
                       onPressed: () => _testAPI(),
                       child: const Text('TestAPI')),
-                  TextButton(
-                      onPressed: () => _TestCookie(),
-                      child: const Text('TestCookie')),
                 ],
               ),
               Row(
@@ -100,10 +104,16 @@ class _Oauth2PageState extends State<Oauth2Page> {
                       child: const Text('oauth2_WithHelper'))
                 ],
               ),
+              Row(
+                children: [
+                  TextButton(
+                      onPressed: () => _clearsaveToken(),
+                      child: const Text('Clear Token')),
+                ],
+              ),
               Text("code:$code"),
               Text("token:$token"),
               Text("save_token:$saveToken"),
-              Text("$devAuthuri"),
               Text("$_err")
             ])));
   }
@@ -111,10 +121,10 @@ class _Oauth2PageState extends State<Oauth2Page> {
   void _testAPI() async {
     String url =
         Uri.https('flutterexample.azurewebsites.net', '/api/Account/GetCode', {
-      'redirect_uri': 'my-research-flutterproject-com://',
+      'redirect_uri': 'flutterwebauth-flutterproject-com://',
     }).toString();
     final result = await FlutterWebAuth2.authenticate(
-        url: url, callbackUrlScheme: 'my-research-flutterproject-com');
+        url: url, callbackUrlScheme: 'flutterwebauth-flutterproject-com');
     debugPrint(result);
     String? resultcode = Uri.parse(result).queryParameters['code'];
     setState(() {
@@ -122,26 +132,10 @@ class _Oauth2PageState extends State<Oauth2Page> {
     });
   }
 
-  void _TestCookie() async {
-    String url = Uri.https(
-        'flutterexample.azurewebsites.net', '/api/Account/TestCookie', {
-      'redirect_uri': 'my-research-flutterproject-com://',
-    }).toString();
-    final result = await FlutterWebAuth2.authenticate(
-        url: url, callbackUrlScheme: 'my-research-flutterproject-com');
-  }
-
-  void _loadsaveToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      saveToken = prefs.getString('access_token') ?? "";
-    });
-  }
-
   void _devLogin() async {
     String url = devAuthuri.toString();
     final result = await FlutterWebAuth2.authenticate(
-        url: url, callbackUrlScheme: 'my-research-flutterproject-com');
+        url: url, callbackUrlScheme: 'flutterwebauth-flutterproject-com');
     debugPrint(result);
     String? resultcode = Uri.parse(result).queryParameters['code'];
     setState(() {
@@ -150,15 +144,27 @@ class _Oauth2PageState extends State<Oauth2Page> {
   }
 
   void _browserLogin() async {
-    await launchUrl(devAuthuri, mode: LaunchMode.platformDefault);
+    Uri uri =
+        Uri.https('accountdev.microlifecloud.com', '/AccountV2/NewLogin', {
+      'client_id': clientId,
+      'response_type': 'code',
+      'redirect_uri': 'my-research-flutterproject-com://',
+      'state': 'flutter',
+      'lang': 'en',
+      'region': 'tw'
+    });
+    await launchUrl(uri, mode: LaunchMode.platformDefault);
   }
 
   void _oauth2clientWithoutHelper() async {
     var client = MyOAuth2Client(
-        redirectUri: 'my-research-flutterproject-com',
-        customUriScheme: 'my-research-flutterproject-com');
+        redirectUri: 'flutterwebauth-flutterproject-com://',
+        customUriScheme: 'flutterwebauth-flutterproject-com');
     AccessTokenResponse tknResp = await client.getTokenWithAuthCodeFlow(
-        clientId: clientId, clientSecret: clientSecret, scopes: ['email'],state: 'flutter');
+        clientId: clientId,
+        clientSecret: clientSecret,
+        scopes: ['email'],
+        state: 'flutter');
     if (tknResp.isExpired()) {
       tknResp = await client.refreshToken(tknResp.refreshToken ?? "",
           clientId: clientId, clientSecret: clientSecret, scopes: ['email']);
@@ -173,28 +179,30 @@ class _Oauth2PageState extends State<Oauth2Page> {
 
   void _oauth2clientWithHelper() async {
     var client = MyOAuth2Client(
-        redirectUri: 'my-research-flutterproject-com',
-        customUriScheme: 'my-research-flutterproject-com');
+        redirectUri: 'flutterwebauth-flutterproject-com://',
+        customUriScheme: 'flutterwebauth-flutterproject-com');
     OAuth2Helper oauth2Helper = OAuth2Helper(client,
         grantType: OAuth2Helper.authorizationCode,
         clientId: clientId,
-        clientSecret: clientSecret);
+        clientSecret: clientSecret,
+        scopes: ['email'],
+        enableState: false);
     // http.Response resp =
     //     oauth2Helper.get('https://www.googleapis.com/drive/v3/files');
     AccessTokenResponse? tknResp = await oauth2Helper.getToken();
-    // final prefs = await SharedPreferences.getInstance();
-    // setState(() {
-    //   token = tknResp?.accessToken ?? "";
-    //   prefs.setString('access_token', token);
-    // });
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      token = tknResp?.accessToken ?? "";
+      prefs.setString('access_token', token);
+    });
   }
 
-  void _gettoken() async {
+  void _gettoken(String redirect_uri) async {
     final response = await http.post(
         Uri.https('accountdev.microlifecloud.com', '/OAuth2/Token'),
         body: {
           'client_id': clientId,
-          'redirect_uri': 'my-research-flutterproject-com://',
+          'redirect_uri': redirect_uri,
           'grant_type': 'authorization_code',
           'code': code,
           'client_secret': clientSecret
@@ -206,6 +214,21 @@ class _Oauth2PageState extends State<Oauth2Page> {
         token = accessToken;
         prefs.setString('access_token', accessToken);
       }
+    });
+  }
+
+  void _loadsaveToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      saveToken = prefs.getString('access_token') ?? "";
+    });
+  }
+
+  void _clearsaveToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('access_token');
+    setState(() {
+      saveToken = "";
     });
   }
 
@@ -259,9 +282,9 @@ class MyOAuth2Client extends OAuth2Client {
   MyOAuth2Client({required this.redirectUri, required this.customUriScheme})
       : super(
             authorizeUrl: devAuthuri.toString(),
-            tokenUrl:
-                Uri.https('accountdev.microlifecloud.com', '/OAuth2/Token')
-                    .toString(),
+            tokenUrl: Uri.https(
+                    'accountdev.microlifecloud.com', '/Oauth2/Token')
+                .toString(),
             redirectUri: redirectUri,
             customUriScheme: customUriScheme);
   final String redirectUri;
