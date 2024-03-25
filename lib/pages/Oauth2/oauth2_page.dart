@@ -282,9 +282,9 @@ class MyOAuth2Client extends OAuth2Client {
   MyOAuth2Client({required this.redirectUri, required this.customUriScheme})
       : super(
             authorizeUrl: devAuthuri.toString(),
-            tokenUrl: Uri.https(
-                    'accountdev.microlifecloud.com', '/Oauth2/Token')
-                .toString(),
+            tokenUrl:
+                Uri.https('accountdev.microlifecloud.com', '/Oauth2/Token')
+                    .toString(),
             redirectUri: redirectUri,
             customUriScheme: customUriScheme);
   final String redirectUri;
