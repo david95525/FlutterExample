@@ -4,38 +4,30 @@
 // utility in the flutter_test package. For example, you can send tap and scroll
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
-import 'package:firebase_authentication_repository/index.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_example/pages/firebase/bloc/bloc_observer.dart';
-import 'package:flutter_example/firebase_options.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_example/main.dart';
+import './wigget_example.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    WidgetsFlutterBinding.ensureInitialized();
-    Bloc.observer = const AppBlocObserver();
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
-    final firebaseAuthenticationRepository = FirebaseAuthenticationRepository();
-    await firebaseAuthenticationRepository.user.first;
-    await tester.pumpWidget(MyApp(
-        firebaseAuthenticationRepository: firebaseAuthenticationRepository));
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('MyWidget has a title and message', (WidgetTester tester) async {
+    // Build the widget
+    await tester.pumpWidget(const TodoList());
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Enter 'hi' into the TextField.
+    await tester.enterText(find.byType(TextField), 'hi');
+    // Tap the add button.
+    await tester.tap(find.byType(FloatingActionButton));
+    // Rebuild the widget after the state has changed.
     await tester.pump();
+    // Expect to find the item on screen.
+    expect(find.text('hi'), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Swipe the item to dismiss it.
+    await tester.drag(find.byType(Dismissible), const Offset(500, 0));
+    // Build the widget until the dismiss animation ends.
+    await tester.pumpAndSettle();
+    // Ensure that the item is no longer on screen.
+    expect(find.text('hi'), findsNothing);
   });
 }

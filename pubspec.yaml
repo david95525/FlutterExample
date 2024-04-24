@@ -46,7 +46,7 @@ dependencies:
   json_annotation: ^4.8.1
   google_sign_in: ^6.2.1
   google_fonts: ^6.1.0 
-  flow_builder: ^0.0.9
+  flow_builder: ^0.1.0
   shared_preferences: ^2.2.2
   hive: ^2.2.3
   hive_flutter: ^1.1.0
@@ -64,6 +64,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test: any
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
