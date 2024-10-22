@@ -24,9 +24,11 @@
 
 <body>
   <script>
+    {{flutter_js}}
+    {{flutter_build_config}}
     let useHtml = true;
     window.addEventListener('load', function (ev) {
-      _flutter.loader.loadEntrypoint({
+      _flutter.loader.load({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         },
