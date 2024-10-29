@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:cache/cache.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_authentication_repository/models/models.dart';
@@ -146,9 +147,9 @@ class LogOutFailure implements Exception {}
 /// {@template authentication_repository}
 /// Repository which manages user authentication.
 /// {@endtemplate}
-class FirebaseAuthenticationRepository {
+class AuthenticationRepository {
   /// {@macro authentication_repository}
-  FirebaseAuthenticationRepository({
+  AuthenticationRepository({
     CacheClient? cache,
     firebase_auth.FirebaseAuth? firebaseAuth,
     GoogleSignIn? googleSignIn,
@@ -175,10 +176,10 @@ class FirebaseAuthenticationRepository {
   /// the authentication state changes.
   ///
   /// Emits [User.empty] if the user is not authenticated.
-  Stream<FirebaseUser> get user {
+  Stream<User> get user {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
       var user =
-          firebaseUser == null ? FirebaseUser.empty : firebaseUser.toUser;
+          firebaseUser == null ? User.empty : firebaseUser.toUser;
       _cache.write(key: userCacheKey, value: user);
       return user;
     });
@@ -186,8 +187,8 @@ class FirebaseAuthenticationRepository {
 
   /// Returns the current cached user.
   /// Defaults to [User.empty] if there is no cached user.
-  FirebaseUser get currentUser {
-    return _cache.read<FirebaseUser>(key: userCacheKey) ?? FirebaseUser.empty;
+  User get currentUser {
+    return _cache.read<User>(key: userCacheKey) ?? User.empty;
   }
 
   /// Creates a new user with the provided [email] and [password].
@@ -272,11 +273,10 @@ class FirebaseAuthenticationRepository {
 
 extension on firebase_auth.User {
   /// Maps a [firebase_auth.User] into a [User].
-  FirebaseUser get toUser {
-    return FirebaseUser(
+  User get toUser {
+    return User(
         id: uid,
         email: providerData[0].email,
-        name: displayName,
-        photo: photoURL);
+        name: displayName);
   }
 }

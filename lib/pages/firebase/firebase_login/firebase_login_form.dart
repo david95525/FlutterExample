@@ -1,10 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_example/my_router.dart';
 import 'package:flutter_example/pages/firebase/bloc/app_bloc.dart';
 import 'package:flutter_example/pages/firebase/firebase_login/cubit/login_cubit.dart';
 import 'package:flutter_example/pages/firebase/firebase_signup/sign_up_page.dart';
-import 'package:flutter_example/my_router.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
 
@@ -31,7 +30,7 @@ class FirebaseLoginForm extends StatelessWidget {
             content: Text('$email login success'),
             backgroundColor: Colors.green,
           ));
-          Navigator.pushNamed(context, RouteName.member);
+        Navigator.pushNamed(context, RouteName.member);
       }
     }, builder: (context, state) {
       return Align(
@@ -51,6 +50,8 @@ class FirebaseLoginForm extends StatelessWidget {
               const SizedBox(height: 8),
               _LoginButton(),
               const SizedBox(height: 8),
+              _FirebaseLoginButton(),
+              const SizedBox(height: 8),
               _GoogleLoginButton(),
               const SizedBox(height: 4),
               _SignUpButton(),
@@ -68,8 +69,9 @@ class _EmailInput extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.email != current.email,
       builder: (context, state) {
-        return TextField(
+        return TextFormField(
           key: const Key('loginForm_emailInput_textField'),
+          initialValue: context.read<LoginCubit>().state.email.value,
           onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
@@ -90,8 +92,9 @@ class _PasswordInput extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
-        return TextField(
+        return TextFormField(
           key: const Key('loginForm_passwordInput_textField'),
+          initialValue: context.read<LoginCubit>().state.password.value,
           onChanged: (password) =>
               context.read<LoginCubit>().passwordChanged(password),
           obscureText: true,
@@ -102,6 +105,33 @@ class _PasswordInput extends StatelessWidget {
                 state.password.displayError != null ? 'invalid password' : null,
           ),
         );
+      },
+    );
+  }
+}
+
+class _FirebaseLoginButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, state) {
+        return state.status.isInProgress
+            ? const CircularProgressIndicator()
+            : ElevatedButton(
+                key: const Key('loginForm_continue_raisedButton'),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  backgroundColor: const Color(0xFFFFD600),
+                ),
+                onPressed: state.isValid
+                    ? () => context
+                        .read<LoginCubit>()
+                        .logInWithFirebaseCredentials()
+                    : null,
+                child: const Text('FirebaseLogin'),
+              );
       },
     );
   }
@@ -123,9 +153,9 @@ class _LoginButton extends StatelessWidget {
                   backgroundColor: const Color(0xFFFFD600),
                 ),
                 onPressed: state.isValid
-                    ? () => context.read<LoginCubit>().logInWithCredentials()
+                    ? () => context.read<LoginCubit>().logInWithPassword()
                     : null,
-                child: const Text('LOGIN'),
+                child: const Text('Login'),
               );
       },
     );

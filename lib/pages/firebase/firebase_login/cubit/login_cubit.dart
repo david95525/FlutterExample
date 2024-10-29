@@ -1,15 +1,20 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_authentication_repository/index.dart';
+import 'package:flutter_example/models/login/login_model.dart';
+import 'package:flutter_example/models/response/response_model.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:formz/formz.dart';
+import 'package:http/http.dart' as http;
 
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this._authenticationRepository) : super(const LoginState());
 
-  final FirebaseAuthenticationRepository _authenticationRepository;
+  final AuthenticationRepository _authenticationRepository;
 
   void emailChanged(String value) {
     final email = Email.dirty(value);
@@ -31,7 +36,32 @@ class LoginCubit extends Cubit<LoginState> {
     );
   }
 
-  Future<void> logInWithCredentials() async {
+  Future<void> logInWithPassword() async {
+    if (!state.isValid) return;
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    var client = http.Client();
+    try {
+      final data =
+          LoginModel(email: state.email.value, password: state.password.value);
+      var response = await client.post(
+          Uri.https('flutterexample.azurewebsites.net', '/api/Account/Login'),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(data.toJson()));
+      if (response.statusCode == 200) {
+        ResponseModel apidata =
+            ResponseModel.fromJson(jsonDecode(response.body));
+        if (apidata.code == 10000) {
+          emit(state.copyWith(status: FormzSubmissionStatus.success));
+        }
+      }
+    } catch (_) {
+      emit(state.copyWith(status: FormzSubmissionStatus.failure));
+    } finally {
+      client.close();
+    }
+  }
+
+  Future<void> logInWithFirebaseCredentials() async {
     if (!state.isValid) return;
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     try {

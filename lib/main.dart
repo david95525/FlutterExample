@@ -2,30 +2,29 @@ import 'package:firebase_authentication_repository/index.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_example/firebase_options.dart';
 import 'package:flutter_example/localizations.dart';
+import 'package:flutter_example/my_router.dart';
 import 'package:flutter_example/pages/firebase/bloc/app_bloc.dart';
 import 'package:flutter_example/pages/firebase/bloc/bloc_observer.dart';
-import 'package:flutter_example/firebase_options.dart';
-import 'package:flutter_example/my_router.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = const AppBlocObserver();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  final firebaseAuthenticationRepository = FirebaseAuthenticationRepository();
-  await firebaseAuthenticationRepository.user.first;
-  runApp(MyApp(
-      firebaseAuthenticationRepository: firebaseAuthenticationRepository));
+  final authenticationRepository = AuthenticationRepository();
+  await authenticationRepository.user.first;
+  runApp(MyApp(authenticationRepository: authenticationRepository));
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({
-    required FirebaseAuthenticationRepository firebaseAuthenticationRepository,
+    required AuthenticationRepository authenticationRepository,
     super.key,
-  }) : _firebaseAuthenticationRepository = firebaseAuthenticationRepository;
+  }) : _authenticationRepository = authenticationRepository;
 
-  final FirebaseAuthenticationRepository _firebaseAuthenticationRepository;
+  final AuthenticationRepository _authenticationRepository;
   @override
   State<MyApp> createState() => _MyAppState();
   static void setLocale(BuildContext context, Locale newLocale) {
@@ -45,12 +44,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-        value: widget._firebaseAuthenticationRepository,
+        value: widget._authenticationRepository,
         child: BlocProvider(
             create: (_) => AppBloc(
-                  authenticationRepository:
-                      widget._firebaseAuthenticationRepository,
-                ),
+                  authenticationRepository: widget._authenticationRepository,
+                )..add(const AppUserSubscriptionRequested()),
             child: MaterialApp(
               title: 'flutter_example',
               debugShowCheckedModeBanner: false,

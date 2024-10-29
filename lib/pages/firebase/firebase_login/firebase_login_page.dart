@@ -16,7 +16,7 @@ class FirebaseLoginPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: BlocProvider(
-          create: (_) => LoginCubit(context.read<FirebaseAuthenticationRepository>()),
+          create: (_) => LoginCubit(context.read<AuthenticationRepository>()),
           child: const FirebaseLoginForm(),
         ),
       ),

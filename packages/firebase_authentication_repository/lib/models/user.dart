@@ -5,13 +5,12 @@ import 'package:equatable/equatable.dart';
 ///
 /// [User.empty] represents an unauthenticated user.
 /// {@endtemplate}
-class FirebaseUser extends Equatable {
+class User extends Equatable {
   /// {@macro user}
-  const FirebaseUser({
+  const User({
     required this.id,
     this.email,
     this.name,
-    this.photo,
   });
 
   /// The current user's email address.
@@ -23,18 +22,15 @@ class FirebaseUser extends Equatable {
   /// The current user's name (display name).
   final String? name;
 
-  /// Url for the current user's photo.
-  final String? photo;
-
   /// Empty user which represents an unauthenticated user.
-  static const empty = FirebaseUser(id: '');
+  static const empty = User(id: '');
 
   /// Convenience getter to determine whether the current user is empty.
-  bool get isEmpty => this == FirebaseUser.empty;
+  bool get isEmpty => this == User.empty;
 
   /// Convenience getter to determine whether the current user is not empty.
-  bool get isNotEmpty => this != FirebaseUser.empty;
+  bool get isNotEmpty => this != User.empty;
 
   @override
-  List<Object?> get props => [email, id, name, photo];
+  List<Object?> get props => [email, id, name];
 }

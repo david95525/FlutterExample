@@ -1,1 +1,1 @@
-export 'firebase_user.dart';
+export 'user.dart';

@@ -1,16 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_example/app/bloc/app_bloc.dart';
+import 'package:flutter_example/localizations.dart';
+import 'package:flutter_example/models/login/login_model.dart';
 import 'package:flutter_example/models/member/member_model.dart';
 import 'package:flutter_example/my_router.dart';
-import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/pages/bodytemperature/bodytemperature_page.dart';
 import 'package:flutter_example/pages/home/home_page.dart';
 import 'package:flutter_example/provider/member_provider.dart';
-import 'package:provider/provider.dart';
-import 'pages/dashboard/dashboard_page.dart';
-import 'pages/bloodpressure/bloodpressure_page.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_example/models/login/login_model.dart';
-import 'dart:convert';
+import 'package:provider/provider.dart';
+
+import 'pages/bloodpressure/bloodpressure_page.dart';
+import 'pages/dashboard/dashboard_page.dart';
 
 const String clientId = String.fromEnvironment('client_id');
 
@@ -67,13 +70,14 @@ class _MemberAppState extends State<MemberApp> {
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               actions: [
                 IconButton(
-                  icon: const Icon(
-                    Icons.logout,
-                    color: Colors.white,
-                  ),
-                  onPressed: () =>
-                      Navigator.pushNamed(context, RouteName.index),
-                ),
+                    icon: const Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      context.read<AppBloc>().add(AppLogoutRequested());
+                      Navigator.pushNamed(context, RouteName.index);
+                    }),
                 TextButton(
                   child: const Text("login"),
                   onPressed: () async {

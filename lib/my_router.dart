@@ -28,7 +28,7 @@ class MyRouter {
               ChangeNotifierProvider<MemberProvider>(
                 create: (context) => MemberProvider(),
               ),
-            ], child: const MemberApp()),
+            ], builder: (context, child) => const MemberApp()),
             RouteName.member);
       case RouteName.firebase:
         return NoAnimRouteBuilder(

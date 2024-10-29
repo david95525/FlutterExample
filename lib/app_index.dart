@@ -3,8 +3,8 @@ import 'package:flutter_example/localizations.dart';
 import 'package:flutter_example/my_router.dart';
 import 'package:flutter_example/pages/bluetooth/bluetooth_page.dart';
 import 'package:flutter_example/pages/local_storage/local_storage.dart';
-import 'package:flutter_example/pages/login/login_page.dart';
 import 'package:flutter_example/pages/sdktest/sdktest_page.dart';
+
 import 'pages/home/home_page.dart';
 
 class IndexApp extends StatefulWidget {
@@ -18,7 +18,6 @@ class _IndexAppState extends State<IndexApp> {
   CustomLocalizations localizations = CustomLocalizations();
   final _bodyList = const [
     HomePage(),
-    LoginPage(),
     LocalStorageApp(),
     BluetoothPage(),
     SDKTestPage()
@@ -31,9 +30,6 @@ class _IndexAppState extends State<IndexApp> {
       BottomNavigationBarItem(
           icon: const Icon(Icons.home),
           label: CustomLocalizations.of(context)?.text("Home")),
-      BottomNavigationBarItem(
-          icon: const Icon(Icons.login),
-          label: CustomLocalizations.of(context)?.text("Login")),
       BottomNavigationBarItem(
           icon: const Icon(Icons.storage),
           label: CustomLocalizations.of(context)?.text("Localstorage")),
@@ -50,14 +46,6 @@ class _IndexAppState extends State<IndexApp> {
             appBar: AppBar(
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
               actions: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.login,
-                    color: Colors.white,
-                  ),
-                  onPressed: () =>
-                      Navigator.pushNamed(context, RouteName.member),
-                ),
                 IconButton(
                     tooltip: "Widgets",
                     onPressed: () =>
