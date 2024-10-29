@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:http/http.dart' as http;
+import 'package:oauth2_client/access_token_response.dart';
+import 'package:oauth2_client/oauth2_client.dart';
+import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:uni_links/uni_links.dart';
-import 'package:flutter/services.dart' show PlatformException;
-import 'package:oauth2_client/oauth2_helper.dart';
-import 'package:oauth2_client/oauth2_client.dart';
-import 'package:oauth2_client/access_token_response.dart';
 
 String clientSecret = const String.fromEnvironment('client_secret');
 String clientId = const String.fromEnvironment('client_id');
@@ -37,13 +37,13 @@ class _Oauth2PageState extends State<Oauth2Page> {
   String code = "";
   String token = "";
   String saveToken = "";
+  late AppLinks _appLinks;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
     _loadsaveToken();
-    _handleInitialUri();
     _handleIncomingLinks();
   }
 
@@ -197,12 +197,12 @@ class _Oauth2PageState extends State<Oauth2Page> {
     });
   }
 
-  void _gettoken(String redirect_uri) async {
+  void _gettoken(String redirectUri) async {
     final response = await http.post(
         Uri.https('accountdev.microlifecloud.com', '/OAuth2/Token'),
         body: {
           'client_id': clientId,
-          'redirect_uri': redirect_uri,
+          'redirect_uri': redirectUri,
           'grant_type': 'authorization_code',
           'code': code,
           'client_secret': clientSecret
@@ -232,30 +232,10 @@ class _Oauth2PageState extends State<Oauth2Page> {
     });
   }
 
-  Future<void> _handleInitialUri() async {
-    if (!_initialUriIsHandled) {
-      _initialUriIsHandled = true;
-      try {
-        final uri = await getInitialUri();
-        if (uri == null) {
-          debugPrint('no initial uri');
-        } else {
-          debugPrint('got initial uri: $uri');
-        }
-        if (!mounted) return;
-      } on PlatformException {
-        debugPrint('falied to get initial uri');
-      } on FormatException catch (err) {
-        if (!mounted) return;
-        debugPrint('malformed initial uri');
-        setState(() => _err = err);
-      }
-    }
-  }
-
   void _handleIncomingLinks() {
     if (!kIsWeb) {
-      _sub = uriLinkStream.listen((Uri? uri) {
+      _appLinks=AppLinks();
+      _sub = _appLinks.uriLinkStream.listen((Uri? uri) {
         if (!mounted) return;
         debugPrint('got uri: $uri');
         String? resultcode = Uri.parse(uri.toString()).queryParameters['code'];
@@ -287,6 +267,8 @@ class MyOAuth2Client extends OAuth2Client {
                     .toString(),
             redirectUri: redirectUri,
             customUriScheme: customUriScheme);
+  @override
   final String redirectUri;
+  @override
   final String customUriScheme;
 }

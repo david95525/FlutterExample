@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
@@ -15,8 +16,10 @@ class _BluetoothPageState extends State<BluetoothPage> {
   List<DiscoveredDevice> deviceList = [];
   List<String> buttonTextList = [];
   List<String> nameList = [];
+  List<int> datalist = [];
   final flutterReactiveBle = FlutterReactiveBle();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final serviceuuid = Uuid.parse("CDEACB81-5235-4C07-8846-93A37EE6B86D");
   String deviceid = "";
   @override
   void initState() {
@@ -37,7 +40,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton(
-                key: const Key('saveButton'),
+                key: const Key('scanButton'),
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
@@ -53,7 +56,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
                     final item = deviceList[index];
                     return ListTile(
                       title: Text(item.id),
-                      subtitle: Text(item.name),
+                      subtitle: Text("${item.name} ${item.serviceUuids[0]}"),
                       trailing: Wrap(
                         children: [
                           ElevatedButton(
@@ -87,6 +90,15 @@ class _BluetoothPageState extends State<BluetoothPage> {
                     );
                   },
                 ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: datalist.length,
+                  itemBuilder: (context, index) {
+                    final item = datalist[index];
+                    return ListTile(title: Text(item.toString()));
+                  },
+                ),
               )
             ],
           ),
@@ -95,16 +107,14 @@ class _BluetoothPageState extends State<BluetoothPage> {
 
   void _scanDevice() {
     _streamSubscription = flutterReactiveBle.scanForDevices(
-        withServices: [], scanMode: ScanMode.lowLatency).listen((device) {
+        withServices: [serviceuuid],
+        scanMode: ScanMode.lowLatency).listen((device) {
       if (device.name.isNotEmpty && !nameList.contains(device.name)) {
         buttonTextList.add("Connect");
         nameList.add(device.name);
         setState(() {
           deviceList.add(device);
         });
-      }
-      if (deviceList.length >= 5) {
-        _streamSubscription?.cancel();
       }
     }, onError: (e) {
       debugPrint("onError = $e");
@@ -117,7 +127,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
     _connectionStreamSubscription = flutterReactiveBle
         .connectToDevice(
       id: device.id,
-      servicesWithCharacteristicsToDiscover: {},
+      servicesWithCharacteristicsToDiscover: {}[serviceuuid],
       connectionTimeout: const Duration(seconds: 3),
     )
         .listen((connectionState) {
@@ -145,6 +155,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
         Timer(const Duration(seconds: 1), () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         });
+        _qualifiedCharacteristic(serviceuuid, serviceuuid, device.id);
       }
       if (connectionState.connectionState ==
           DeviceConnectionState.disconnected) {
@@ -194,28 +205,32 @@ class _BluetoothPageState extends State<BluetoothPage> {
         characteristicId: characteristicId,
         deviceId: deviceId);
     flutterReactiveBle.subscribeToCharacteristic(characteristic).listen((data) {
-      debugPrint("data = $data");
+      for (int i = 0; i < data.length; i++) {
+        setState(() {
+          datalist.add(data[i]);
+        });
+      }
     }, onError: (dynamic error) {});
-    //Read characteristic
-    final response =
-        await flutterReactiveBle.readCharacteristic(characteristic);
+  }
+}
+  //Read characteristic
+    // final response =
+    //     await flutterReactiveBle.readCharacteristic(characteristic);
     //Write with response
-    await flutterReactiveBle
-        .writeCharacteristicWithResponse(characteristic, value: [0x00]);
+    // await flutterReactiveBle
+    //     .writeCharacteristicWithResponse(characteristic, value: [0x00]);
     //Write without response
-    await flutterReactiveBle
-        .writeCharacteristicWithoutResponse(characteristic, value: [0x00]);
+    // await flutterReactiveBle
+    //     .writeCharacteristicWithoutResponse(characteristic, value: [0x00]);
     //Negotiate MTU size
-    final mtu =
-        await flutterReactiveBle.requestMtu(deviceId: deviceId, mtu: 250);
+    // final mtu =
+    //     await flutterReactiveBle.requestMtu(deviceId: deviceId, mtu: 250);
 
     /**Android specific operations**/
     //Request connection priority
     //Be cautious when setting the priority when communicating with multiple devices because
     //if you set highperformance for all devices the effect of increasing the priority will be lower
-    await flutterReactiveBle.requestConnectionPriority(
-        deviceId: deviceId, priority: ConnectionPriority.highPerformance);
+    // await flutterReactiveBle.requestConnectionPriority(
+    //     deviceId: deviceId, priority: ConnectionPriority.highPerformance);
     //Clear GATT cache
-    await flutterReactiveBle.clearGattCache(deviceId);
-  }
-}
+    // await flutterReactiveBle.clearGattCache(deviceId);

@@ -102,7 +102,7 @@ class _IndexAppState extends State<IndexApp> {
   }
 
   void _onItemTap(int index) {
-    if (index == 2) {
+    if (index == 1) {
       Navigator.pushNamed(context, RouteName.localstorage);
     } else {
       setState(() => _selectedIndex = index);
