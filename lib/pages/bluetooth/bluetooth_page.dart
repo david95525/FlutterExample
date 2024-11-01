@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class BluetoothPage extends StatefulWidget {
   const BluetoothPage({super.key});
@@ -46,7 +47,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                onPressed: () => _scanDevice(),
+                onPressed: () => _permission(),
                 child: const Text('scan'),
               ),
               Expanded(
@@ -56,7 +57,7 @@ class _BluetoothPageState extends State<BluetoothPage> {
                     final item = deviceList[index];
                     return ListTile(
                       title: Text(item.id),
-                      subtitle: Text("${item.name} ${item.serviceUuids[0]}"),
+                      subtitle: Text("${item.name} ${item.id}"),
                       trailing: Wrap(
                         children: [
                           ElevatedButton(
@@ -105,16 +106,47 @@ class _BluetoothPageState extends State<BluetoothPage> {
         ));
   }
 
+  void _permission() async {
+    if (await Permission.location.serviceStatus.isEnabled) {
+      debugPrint('Location services is enabled');
+    } else {
+      debugPrint('Location services is NOT enabled');
+    }
+    if (await Permission.location.status.isGranted) {
+      debugPrint('Location permission is granted');
+    } else {
+      debugPrint('Location permission is not granted');
+      await [
+        Permission.location,
+      ].request();
+      var status = await Permission.location.status;
+    }
+    var ScanStatus = await Permission.bluetoothScan.status;
+    if (ScanStatus.isGranted) {
+    } else {
+      await Permission.bluetoothScan.request();
+    }
+    var ConnectStatus = await Permission.bluetoothConnect.status;
+    if (ConnectStatus.isGranted) {
+      _scanDevice();
+    } else {
+      await Permission.bluetoothConnect.request();
+      _scanDevice();
+    }
+  }
+
   void _scanDevice() {
     _streamSubscription = flutterReactiveBle.scanForDevices(
-        withServices: [serviceuuid],
-        scanMode: ScanMode.lowLatency).listen((device) {
+        withServices: [], scanMode: ScanMode.lowLatency).listen((device) {
       if (device.name.isNotEmpty && !nameList.contains(device.name)) {
+        debugPrint(device.name);
         buttonTextList.add("Connect");
         nameList.add(device.name);
         setState(() {
           deviceList.add(device);
         });
+      } else {
+        _streamSubscription?.cancel();
       }
     }, onError: (e) {
       debugPrint("onError = $e");
